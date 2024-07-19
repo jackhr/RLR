@@ -9,7 +9,7 @@
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="/book-now.php">Book Now</a></li>
-                    <li><a href="/about.php">About</a></li>
+                    <li><a href="/about.php">About Us / Antigua</a></li>
                     <li><a href="/faq.php">FAQ</a></li>
                     <li><a href="/contact.php">Contact</a></li>
                 </ul>
@@ -23,7 +23,7 @@
                 <h6>Contact</h6>
                 <div class="contact-link">
                     <span>Phone:</span>
-                    <a href="tel:+1 (268) 786-7559">+1 (268) 786-7559</a>
+                    <a href="tel:+1 (268) 720-4581">+1 (268) 720-4581</a>
                 </div>
                 <div class="contact-link">
                     <span>Email:</span>

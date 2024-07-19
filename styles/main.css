@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 :root {
-    --primary         : #d4a32a;
-    --primary-rgb     : rgb(212, 163, 42);
-    --primary-rgb-vals: 212, 163, 42;
+    --primary         : #1589C9;
+    --primary-rgb     : rgb(21, 137, 201);
+    --primary-rgb-vals: 21, 137, 201;
     --secondary       : #6c98e1;
     --black           : #232628;
     --white           : #f5f5f5;
@@ -316,11 +316,12 @@ header {
 header div.inner {
     flex-direction: row;
     height        : 100%;
+    align-items   : center;
 }
 
 header div.inner>a,
 header div.inner img {
-    height: 100%;
+    height: 80%;
 }
 
 header div.inner nav {
@@ -406,17 +407,17 @@ html.viewing-hamburger-menu #hamburger-nav {
 }
 
 #intro-section {
-    background           : url("/assets/images/bg/silver-car-under-palm-trees-at-beach-noon.jpg") center no-repeat;
-    background-size      : cover;
-    background-position-y: 100%;
+    background     : url("/assets/images/bg/darkwood-beach.jpg") center top no-repeat;
+    background-size: cover;
 }
 
 #intro-section form {
-    width     : 350px;
-    background: var(--primary);
-    padding   : 30px;
-    text-align: left;
-    border    : solid 2px var(--black);
+    width      : 350px;
+    background : var(--primary);
+    padding    : 30px;
+    text-align : left;
+    border     : solid 2px var(--black);
+    margin-left: auto;
 }
 
 #intro-section h2 {
@@ -512,7 +513,7 @@ html.viewing-hamburger-menu #hamburger-nav {
 }
 
 #landing-cars-section {
-    background           : url("/assets/images/bg/shirley-heights-antigua-view.jpg") center no-repeat;
+    background           : url("/assets/images/bg/mood-blue-sky-palms.jpg") center no-repeat;
     background-position  : center;
     background-size      : cover;
     background-attachment: fixed;
@@ -928,6 +929,7 @@ table tr td:last-child {
         max-width       : 350px;
         width           : 100%;
         background-color: rgba(var(--primary-rgb-vals), 0.6);
+        margin          : auto;
     }
 
     footer div.inner>div:first-child {

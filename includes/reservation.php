@@ -2,6 +2,7 @@
 session_start();
 
 include 'connection.php';
+include 'helpers.php';
 
 // Get the JSON data
 $json = file_get_contents('php://input');
@@ -14,7 +15,19 @@ if (isset($data['step'])) {
 
 if ($data['action'] === 'itinerary') {
     unset($data['action']);
+    $days = getDifferenceInDays($data['pickUpDate']['date'], $data['returnDate']['date']);
     $_SESSION['reservation']['itinerary'] = $data;
+    $_SESSION['reservation']['itinerary']['days'] = $days;
+
+    if (isset($_SESSION['reservation']['vehicle'])) {
+        $vehicle_discount_query = "SELECT * FROM vehicle_discounts WHERE vehicle_id = {$_SESSION['reservation']['vehicle']['id']} AND `days` <= $days ORDER BY `days` DESC LIMIT 1";
+        $vehicle_discount_result = mysqli_query($con, $vehicle_discount_query);
+        $discount = mysqli_fetch_assoc($vehicle_discount_result);
+
+        $_SESSION['reservation']['discount'] = $discount;
+    }
+
+    $data = $_SESSION['reservation'];
 }
 
 if ($data['action'] === 'vehicle') {
@@ -24,6 +37,17 @@ if ($data['action'] === 'vehicle') {
     $vehicle = mysqli_fetch_assoc($vehicle_result);
     $vehicle['imgSrc'] = "/assets/images/vehicles/{$vehicle['slug']}.jpg";
     $_SESSION['reservation']['vehicle'] = $vehicle;
+
+    if (isset($_SESSION['reservation']['itinerary'])) {
+        $days = $_SESSION['reservation']['itinerary']['days'];
+
+        $vehicle_discount_query = "SELECT * FROM vehicle_discounts WHERE vehicle_id = {$data['id']} AND `days` <= $days ORDER BY `days` DESC LIMIT 1";
+        $vehicle_discount_result = mysqli_query($con, $vehicle_discount_query);
+        $discount = mysqli_fetch_assoc($vehicle_discount_result);
+
+        $_SESSION['reservation']['discount'] = $discount;
+    }
+
     $data = $_SESSION['reservation'];
 }
 

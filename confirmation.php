@@ -29,6 +29,11 @@ $vehicle_query = "SELECT * FROM vehicles WHERE `id` = {$order_request['car_id']}
 $vehicle_result = mysqli_query($con, $vehicle_query);
 $vehicle = mysqli_fetch_assoc($vehicle_result);
 
+// Get the vehicle discounts
+$vehicle_discount_query = "SELECT * FROM vehicle_discounts WHERE `vehicle_id` = {$order_request['car_id']} AND `days` <= {$order_request['days']} ORDER BY `days` DESC LIMIT 1";
+$vehicle_discount_result = mysqli_query($con, $vehicle_discount_query);
+$discount = mysqli_fetch_assoc($vehicle_discount_result);
+
 // Get the contact infos
 $contact_info_query = "SELECT * FROM contact_info WHERE `id` = {$order_request['contact_info_id']}";
 $contact_info_result = mysqli_query($con, $contact_info_query);

@@ -1,5 +1,5 @@
 #about-page .general-header {
-    background-image     : url("/assets/images/bg/aerial-vew-of-jolly-harbour.jpg");
+    background-image     : url("/assets/images/bg/rendezvous-bay.jpg");
     background-position-y: 20%;
 }
 
@@ -9,6 +9,11 @@
 
 #about-section div.inner {
     gap: 80px;
+}
+
+#about-section h4 {
+    margin-top: 48px;
+    width     : max-content;
 }
 
 .about-panel {

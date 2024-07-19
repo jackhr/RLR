@@ -32,13 +32,19 @@ try {
     $email = $data["email"];
 
     // Get data from session
-    $itinerary = $_SESSION['reservation']['itinerary'];
-    $vehicle = $_SESSION['reservation']['vehicle'];
-    $add_ons = $_SESSION['reservation']['add_ons'];
+    $reservation = $_SESSION['reservation'];
+    $itinerary = $reservation['itinerary'];
+    $vehicle = $reservation['vehicle'];
+    $add_ons = $reservation['add_ons'];
+    $discount = $reservation['discount'] ? $reservation['discount'] : null;
 
     // Caclulate what is needed
-    $days = getDifferenceInDays($itinerary['pickUpDate']['date'], $itinerary['returnDate']['date']);
-    $sub_total = (int)$vehicle['price_day_USD'] * $days + array_sum(array_column($add_ons, 'cost'));
+    $days = $itinerary['days'];
+    $price_day = (int)$vehicle['price_day_USD'];
+    if (isset($discount)) {
+        $price_day = (int)$reservation['discount']['price_USD'];
+    }
+    $sub_total = ($price_day * $days) + getAddOnsSubTotal($add_ons, $days);
     $timestamp = time();
     $pick_up_ts = ((int)$itinerary['pickUpDate']['ts'] / 1000);
     $drop_off_ts = ((int)$itinerary['returnDate']['ts'] / 1000);
@@ -70,7 +76,7 @@ try {
 
     // Email values
     $subject = "Car Rental Request at RL Rentals (Antigua)";
-    $headers  = "From: no-reply@rlrentalsantigua.com\r\n";
+    $headers  = "From: no-reply@rlrentals.com\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
 
@@ -80,7 +86,8 @@ try {
     $mail_res_client = mail($email, $subject, $body, $headers);
 
     // Send email to Admin
-    $mail_res_admin = mail("jc2o@mac.com,jrainey@tropicalstudios.com,info@rlrentalsantigua.com", $subject, $body, $headers);
+    $to = "info@rlrentals.com,jc2o@mac.com,jrainey@tropicalstudios.com";
+    $mail_res_admin = mail($to, $subject, $body, $headers);
 
     session_destroy();
 
@@ -89,7 +96,7 @@ try {
         "message" => "success",
         "status" => 200,
         "data" => [
-            "mail" => compact("to", "subject", "body", "headers", "mail_res", "mail_res_client", "mail_res_admin"),
+            "mail" => compact("to", "subject", "body", "headers", "mail_res_client", "mail_res_admin"),
             "key" => $key,
         ]
     ]);

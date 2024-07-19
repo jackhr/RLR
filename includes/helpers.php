@@ -31,11 +31,44 @@ function respond($res)
     die();
 }
 
+function getNameTdStr($add_on, $days)
+{
+    $name_td_str = "1 x {$add_on['name']}";
+    if ($add_on['fixed_price'] !== "1") $name_td_str .= " for $days day(s)";
+    return $name_td_str;
+}
+
+function getAddOnCostForTotalDays($add_on, $days = 1)
+{
+    $new_cost = (int)$add_on['cost'];
+    if ($add_on['fixed_price'] !== "1") $new_cost *= $days;
+    return $new_cost;
+}
+
+function getAddOnsSubTotal($add_ons = null, $days = null, $itinerary = null)
+{
+    $sub_total = 0;
+    if (isset($add_ons)) {
+        if (!isset($days)) {
+            $days = 1;
+            if (isset($itinerary)) {
+                $days = getDifferenceInDays($itinerary['pickUpDate']['date'], $itinerary['returnDate']['date']);
+            }
+        }
+
+        foreach ($add_ons as $add_on) {
+            $sub_total += getAddOnCostForTotalDays($add_on, $days);
+        }
+    }
+
+    return $sub_total;
+}
+
 function generateEmailBody($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key)
 {
     function generateAddress($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email)
     {
-        return "{$first_name} {$last_name}<br>{$street}<br>{$town_city}, {$state_county}<br>{$country_region}<br><a href=\"tel:{$phone}\" style=\"color:#d4a32a;font-weight:normal;text-decoration:underline\" target=\"_blank\">{$phone}</a><br><a href=\"mailto:$email\" target=\"_blank\">{$email}</a>";
+        return "{$first_name} {$last_name}<br>{$street}<br>{$town_city}, {$state_county}<br>{$country_region}<br><a href=\"tel:{$phone}\" style=\"color:#1589c9;font-weight:normal;text-decoration:underline\" target=\"_blank\">{$phone}</a><br><a href=\"mailto:$email\" target=\"_blank\">{$email}</a>";
     }
 
     $fontFamily = 'font-family:"Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;';
@@ -47,7 +80,7 @@ function generateEmailBody($first_name, $last_name, $country_region, $street, $t
                 <tbody>
                     <tr>
                         <td align="center" valign="top">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#d4a32a;color:#ffffff;border-bottom:0;font-weight:bold;line-height:100%;vertical-align:middle;' . $fontFamily . 'border-radius:3px 3px 0 0">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#1589c9;color:#ffffff;border-bottom:0;font-weight:bold;line-height:100%;vertical-align:middle;' . $fontFamily . 'border-radius:3px 3px 0 0">
                                 <tbody>
                                     <tr>
                                         <td style="padding:36px 48px;display:block">
@@ -70,9 +103,9 @@ function generateEmailBody($first_name, $last_name, $country_region, $street, $t
                                                         <td valign="top" style="padding:48px 48px 32px">
                                                             <div style="color:#636363;' . $fontFamily . 'font-size:14px;line-height:150%;text-align:left">
                                                                 <p style="margin:0 0 16px">Hi ' . $first_name . ' ' . $last_name . ',</p>
-                                                                <p style="margin:0 0 16px">Just to let you know - we\'ve received your order #43, and it is now being processed.</p>
+                                                                <p style="margin:0 0 16px">Just to let you know - we\'ve received your order #' . $order_request_id . ', and it is now being processed.</p>
                                                                 <p style="margin:0 0 16px">Pay with cash or card when you pick-up your vehicle.</p>
-                                                                <h2 style="color:#d4a32a;display:block;' . $fontFamily . 'font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">Order #' . $order_request_id . ' (<time datetime="' . gmdate("Y-m-d\TH:i:s\+00:00", $timestamp) . '">' . (date("F d, Y", $timestamp)) . '</time>)</h2>
+                                                                <h2 style="color:#1589c9;display:block;' . $fontFamily . 'font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">Order #' . $order_request_id . ' (<time datetime="' . gmdate("Y-m-d\TH:i:s\+00:00", $timestamp) . '">' . (date("F d, Y", $timestamp)) . '</time>)</h2>
                                                                 <table cellspacing="0" cellpadding="6" border="1" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;width:100%;font-family:\"Helvetica Neue\"Helvetica,Roboto,Arial,sans-serif">
                                                                     <thead>
                                                                         <tr>
@@ -90,11 +123,13 @@ function generateEmailBody($first_name, $last_name, $country_region, $street, $t
                                                                             </td>
                                                                         </tr>';
     foreach ($add_ons as $add_on) {
+        $add_on_cost = getAddOnCostForTotalDays($add_on, $days);
+        $quantity = $add_on['fixed_price'] !== "1" ? $days : 1;
         $body .= '                                                      <tr>
                                                                             <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;word-wrap:break-word">' . $add_on['name'] . '</td>
-                                                                            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">1</td>
+                                                                            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">' . $quantity . '</td>
                                                                             <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">
-                                                                                <span><u></u>USD<span>$</span>' . $add_on['cost'] . '<u></u></span>
+                                                                                <span><u></u>USD<span>$</span>' . $add_on_cost . '<u></u></span>
                                                                             </td>
                                                                         </tr>';
     }
@@ -135,14 +170,14 @@ function generateEmailBody($first_name, $last_name, $country_region, $street, $t
                                                                     <tbody>
                                                                         <tr>
                                                                             <td valign="top" width="50%" style="text-align:left;' . $fontFamily . 'border:0;padding:0">
-                                                                                <h2 style="color:#d4a32a;display:block;' . $fontFamily . 'font-size:18px;font-weight:bold;line-height:130%;margin:18px 0;text-align:left">Billing address</h2>
+                                                                                <h2 style="color:#1589c9;display:block;' . $fontFamily . 'font-size:18px;font-weight:bold;line-height:130%;margin:18px 0;text-align:left">Billing address</h2>
 
                                                                                 <address style="' . $fontFamily . 'padding:12px;color:#636363;border:1px solid #e5e5e5">' . generateAddress($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email) . ' </address>
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
                                                                 </table>
-                                                                <p style="margin:0 0 16px;text-align: center;">Thanks for using <a href="http://www.rlrentalsantigua.com/confirmation.php?key=' . $key . '" target="_blank">www.rlrentalsantigua.com</a>!</p>
+                                                                <p style="margin:0 0 16px;text-align: center;">Thanks for using <a href="http://www.www.rlrentalsantigua.com/confirmation.php?key=' . $key . '" target="_blank">www.www.rlrentalsantigua.com</a>!</p>
                                                             </div>
                                                         </td>
                                                     </tr>

@@ -32,6 +32,13 @@ include_once 'includes/header.php';
             <div class="faq">
                 <div class="faq-top">
                     <div class="faq-toggle"></div>
+                    <span class="faq-question">What are the collision damage insurance rates for your vehicles?</span>
+                </div>
+                <p class="faq-answer">Insurance base cost is USD$10/day.  If applicable, a premium will be added to your bill after you place your order.  Please see full rates for all vehicles below.<br><br><b>USD$10/day:</b> <i>Toyota Vitz / Toyota Allion / Toyota Yaris / Toyota Corolla</i><br><br><b>USD$12/day:</b> <i>Toyota RAV4 / Mazda CX-5 / Toyota Rush / Kia Seltos / Toyota Raize / Kia Sportage</i><br><br><b>USD$15/day:</b> <i>Jeep Wrangler / Toyota Estima / Toyota Hilux</i><br><br><b>USD$20/day:</b> <i>Toyota Prado / Toyota Fortuner</i></p>
+            </div>
+            <div class="faq">
+                <div class="faq-top">
+                    <div class="faq-toggle"></div>
                     <span class="faq-question">Will there be a fee if I have to cancel my reservation?</span>
                 </div>
                 <p class="faq-answer">No, provided that RL Rentals (Antigua) has not dispatched a vehicle at the time you cancel.</p>
@@ -48,7 +55,7 @@ include_once 'includes/header.php';
                     <div class="faq-toggle"></div>
                     <span class="faq-question">What is the rental time period?</span>
                 </div>
-                <p class="faq-answer">Daily Rentals: Daily rentals are based on a 24-hour period.Weekly Rentals: Weekly rentals are based on a week to week period and the same for Monthly rentals.Long Term/Leasing: Terms will be arranged.If the car is returned after the 24-hour period, then an additional charge is assessed.</p>
+                <p class="faq-answer">Daily Rentals: Daily rentals are based on a 24-hour period.<br><br>Weekly Rentals: Weekly rentals are based on a week to week period and the same for Monthly rentals.<br><br>Long Term/Leasing: Terms will be arranged.<br><br>If the car is returned after the 24-hour period, then an additional charge is assessed.</p>
             </div>
             <div class="faq">
                 <div class="faq-top">
@@ -69,7 +76,7 @@ include_once 'includes/header.php';
                     <div class="faq-toggle"></div>
                     <span class="faq-question">What exchange rate do you use from $USD to $ECD?</span>
                 </div>
-                <p class="faq-answer">The local currency in Antigua is Eastern Caribbean Dollars (ECD). The fixed bank rate for conversion of USD to ECD is US$1.00 = EC$2.7169. We accept payment in both USD and ECD.</p>
+                <p class="faq-answer">The local currency in Antigua is Eastern Caribbean Dollars (ECD). The fixed bank rate for conversion of USD to ECD is US$1.00 = EC$2.7169.<br><br>We accept cash payments in ECD, USD, GBP, EUR and CAD. GBP, EUR and CAD at daily bank rate.</p>
             </div>
             <div class="faq">
                 <div class="faq-top">
@@ -97,14 +104,14 @@ include_once 'includes/header.php';
                     <div class="faq-toggle"></div>
                     <span class="faq-question">How do I navigate around the Island?</span>
                 </div>
-                <p class="faq-answer">A complementary offer (upon availability) is given for GPS turn-by-turn navigation. Also, maps are available in your vehicle.</p>
+                <p class="faq-answer">A complementary offer (upon availability) is given for GPS turn-by-turn navigation. Also, maps are available in your vehicle.<br><br>A USD$100.00 fee will be charged for lost, stolen or damaged GPS.</p>
             </div>
             <div class="faq">
                 <div class="faq-top">
                     <div class="faq-toggle"></div>
                     <span class="faq-question">How should I return my vehicle?</span>
                 </div>
-                <p class="faq-answer">All vehicles should be returned in the same condition as when the rental vehicle were delivered or picked up. If the vehicle is not fueled, you will be charged a fuel charge.</p>
+                <p class="faq-answer">All vehicles should be returned in the same condition as when the rental vehicle were delivered or picked up. If the vehicle is not fueled, you will be charged a fuel charge.<br><br>If the vehicle is returned with excessive sand, you will be charged a fee of USD$100.00.</p>
             </div>
 
         </div>

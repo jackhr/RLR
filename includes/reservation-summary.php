@@ -3,44 +3,66 @@
 include_once 'helpers.php';
 
 if (!!$order_request) {
+    $apply_discount = isset($discount);
+    $days = $order_request['days'];
+    $price_day = (int)$vehicle['base_price_USD'];
+    if ($apply_discount) {
+        $price_day = (int)$discount['price_USD'];
+    }
     $vehicle['imgSrc'] = "/assets/images/vehicles/{$vehicle['slug']}.jpg";
     $vehicle_name = $vehicle['name'];
     $vehicle_type = $vehicle['type'];
     $vehicle_img_src = $vehicle['imgSrc'];
     $render_change_btn = false;
-    $days = getDifferenceInDays($order_request['pick_up'], $order_request['drop_off']);
     $rate = [
         'days' => $days,
-        'rate' => makePriceString($vehicle['price_day_USD']),
-        'sub_total' => makePriceString((int)$vehicle['price_day_USD'], $days)
+        'rate' => makePriceString($price_day),
+        'sub_total' => makePriceString($price_day, $days)
     ];
-    $estimated_total = ((int)$vehicle['price_day_USD'] * $days) + array_sum(array_column($add_ons, 'cost'));
+
+    if ($apply_discount) {
+        $rate['rate'] .= '<div class="discount-tool-tip">i<div><span>Fixed price:</span><span><b>2</b> days or more: <b>' . $rate['rate'] . '</b></span></div></div>';
+    }
+
+    $estimated_total = ($price_day * $days) + getAddOnsSubTotal($add_ons, $days);
     $estimated_total = makePriceString($estimated_total);
 } else if (isset($_SESSION['reservation'])) {
     $render_change_btn = true;
     $reservation = $_SESSION['reservation'];
     if (isset($reservation['vehicle'])) {
+        $days = 1;
+        $apply_discount = isset($reservation['discount']);
+        $price_day = (int)$vehicle['base_price_USD'];
+
+        if ($apply_discount) {
+            $price_day = (int)$reservation['discount']['price_USD'];
+        }
+        
         $vehicle = $reservation['vehicle'];
         $vehicle_name = $vehicle['name'];
         $vehicle_type = $vehicle['type'];
         $vehicle_img_src = $vehicle['imgSrc'];
-        $days = 1;
         $rate = [
             'days' => $days,
-            'rate' => makePriceString($vehicle['price_day_USD']),
-            'sub_total' => makePriceString((int)$vehicle['price_day_USD'])
+            'rate' => makePriceString($price_day),
+            'sub_total' => makePriceString($price_day)
         ];
         if (isset($reservation['itinerary'])) {
             $itinerary = $reservation['itinerary'];
-            $days = getDifferenceInDays($itinerary['pickUpDate']['date'], $itinerary['returnDate']['date']);
-            $rate['days'] = $days;
-            $rate['sub_total'] = makePriceString((int)$vehicle['price_day_USD'], $days);
+            $rate['days'] = $itinerary['days'];
+            $rate['sub_total'] = makePriceString($price_day, $rate['days']);
         }
-        $estimated_total = (int)$vehicle['price_day_USD'] * $days;
+        $estimated_total = $price_day * $rate['days'];
+
+        if ($apply_discount) {
+            $rate['rate'] .= '<div class="discount-tool-tip">i<div><span>Fixed price:</span><span><b>2</b> days or more: <b>' . $rate['rate'] . '</b></span></div></div>';
+        }
     }
     if (isset($reservation['add_ons']) && count($reservation['add_ons']) > 0) {
         $add_ons = $reservation['add_ons'];
-        $estimated_total = isset($estimated_total) ? $estimated_total + array_sum(array_column($add_ons, 'cost')) : array_sum(array_column($add_ons, 'cost'));
+        $new_total = getAddOnsSubTotal($reservation['add_ons'], null, $reservation['itinerary']);
+        if (isset($estimated_total)) $new_total += $estimated_total;
+        $estimated_total = $new_total;
     }
     $estimated_total = isset($estimated_total) ? makePriceString($estimated_total) : "--";
 } else {
@@ -112,19 +134,29 @@ if (!!$order_request) {
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>Rate</th>
                         <th>subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($add_ons as $id => $add_on) { ?>
                         <tr data-id="<?php echo $id; ?>">
-                            <td><?php echo $add_on['name']; ?></td>
+                            <td><?php echo getNameTdStr($add_on, $rate['days']); ?></td>
                             <td><?php echo makePriceString($add_on['cost']); ?></td>
+                            <td><?php echo makePriceString(getAddOnCostForTotalDays($add_on, $rate['days'])); ?></td>
                         </tr>
                     <?php } ?>
                     <tr>
                         <td>Add-ons Subtotal</td>
-                        <td><?php echo makePriceString(array_sum(array_column($add_ons, 'cost'))); ?></td>
+                        <td></td>
+                        <?php
+                        $add_ons_sub_total = !!$order_request ? (
+                            getAddOnsSubTotal($add_ons, $rate['days'])
+                        ) : (
+                            getAddOnsSubTotal($add_ons, null, $reservation['itinerary'])
+                        );
+                        ?>
+                        <td><?php echo makePriceString($add_ons_sub_total); ?></td>
                     </tr>
                 </tbody>
             </table>

@@ -1,5 +1,5 @@
 #reservation-page .general-header {
-    background-image: url("/assets/images/bg/side-view-happy-friends-campervan.jpg");
+    background-image: url("/assets/images/bg/pigeon-beach.jpg");
 }
 
 #itinerary-section div.inner,
@@ -275,6 +275,45 @@
     font-weight    : 700;
 }
 
+.discount-tool-tip {
+    background     : var(--black);
+    width          : 14px;
+    display        : inline-flex;
+    height         : 14px;
+    border-radius  : 100%;
+    color          : var(--white);
+    justify-content: center;
+    position       : relative;
+    top            : 0px;
+    font-size      : 11px;
+    font-weight    : bold;
+    cursor         : pointer;
+    margin-left    : 6px;
+}
+
+.discount-tool-tip>div {
+    background    : var(--primary);
+    position      : absolute;
+    top           : 24px;
+    right         : 0;
+    display       : flex;
+    flex-direction: column;
+    white-space   : nowrap;
+    padding       : 24px;
+    color         : var(--black);
+    font-weight   : 500;
+    font-size     : 14px;
+    gap           : 4px;
+    opacity       : 0;
+    pointer-events: none;
+    transition    : opacity ease 0.4s;
+}
+
+.discount-tool-tip:hover>div {
+    opacity       : 1;
+    pointer-events: all;
+}
+
 #vehicles {
     display       : flex;
     flex-direction: column;
@@ -322,7 +361,7 @@
 .vehicle-container div.center>div:last-child {
     display    : flex;
     align-items: center;
-    margin     : auto;
+    margin     : auto 0;
     gap        : 20px;
 }
 
