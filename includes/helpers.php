@@ -1,5 +1,26 @@
 <?php
 
+function makeAddOnDescriptionStr($add_on, $vehicles)
+{
+    $add_on_str = $add_on['description'];
+    if ($add_on['name'] !== "Collision Insurance") return $add_on_str;
+
+    foreach ($vehicles as $vehicle) {
+        $key = "USD\${$vehicle['insurance']}/day";
+        if (isset($insurance_strings_arr[$key])) {
+            $insurance_strings_arr[$key] = $insurance_strings_arr[$key] . " / " . $vehicle['name'];
+        } else {
+            $insurance_strings_arr[$key] = $vehicle['name'];
+        }
+    }
+
+    foreach ($insurance_strings_arr as $key => $insurance_str) {
+        $add_on_str .= "<br><br><b>{$key}</b>: <i>{$insurance_str}</i>";
+    }
+
+    return $add_on_str;
+}
+
 function getDifferenceInDays($pickUpDate, $returnDate)
 {
     $start = new DateTime($pickUpDate);
@@ -10,6 +31,7 @@ function getDifferenceInDays($pickUpDate, $returnDate)
 
 function makePriceString($rate, $days = 1, $currency = "USD")
 {
+    if (!isset($rate)) $rate = 0;
     // Currency can only be USD or EC
     if ($currency !== "USD" && $currency !== "EC") $currency = "USD";
     return '$' . $currency . ((int)$rate * $days);
@@ -38,14 +60,20 @@ function getNameTdStr($add_on, $days)
     return $name_td_str;
 }
 
-function getAddOnCostForTotalDays($add_on, $days = 1)
+function getAddOnCostForTotalDays($add_on, $days = 1, $vehicle = null)
 {
     $new_cost = (int)$add_on['cost'];
-    if ($add_on['fixed_price'] !== "1") $new_cost *= $days;
+    if ($add_on['name'] === "Collision Insurance") {
+        if (isset($vehicle)) {
+            $new_cost = (int)$vehicle['insurance'] * $days;
+        } else {
+            $new_cost = 0;
+        }
+    }
     return $new_cost;
 }
 
-function getAddOnsSubTotal($add_ons = null, $days = null, $itinerary = null)
+function getAddOnsSubTotal($add_ons = null, $days = null, $itinerary = null, $vehicle = null)
 {
     $sub_total = 0;
     if (isset($add_ons)) {
@@ -57,7 +85,7 @@ function getAddOnsSubTotal($add_ons = null, $days = null, $itinerary = null)
         }
 
         foreach ($add_ons as $add_on) {
-            $sub_total += getAddOnCostForTotalDays($add_on, $days);
+            $sub_total += getAddOnCostForTotalDays($add_on, $days, $vehicle);
         }
     }
 
@@ -123,7 +151,7 @@ function generateEmailBody($first_name, $last_name, $country_region, $street, $t
                                                                             </td>
                                                                         </tr>';
     foreach ($add_ons as $add_on) {
-        $add_on_cost = getAddOnCostForTotalDays($add_on, $days);
+        $add_on_cost = getAddOnCostForTotalDays($add_on, $days, $vehicle);
         $quantity = $add_on['fixed_price'] !== "1" ? $days : 1;
         $body .= '                                                      <tr>
                                                                             <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;word-wrap:break-word">' . $add_on['name'] . '</td>

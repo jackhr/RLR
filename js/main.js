@@ -93,14 +93,28 @@ $(function () {
         $(this).find('.faq-answer').slideToggle();
     });
 
-    $(".reservation-step").on('click', function () {
+    $(".reservation-step").on('click', async function () {
         if ($(this).hasClass('active')) return;
         const step = $(this).data('step');
         $(".reservation-step").removeClass('active');
         $(this).addClass('active');
 
-        $("section[data-step]").hide();
-        $(`section[data-step="${step}"]`).first().show();
+        if (step === 2) {
+            const ReservationSessionRes = await fetch('/includes/reservation.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',  // Set Content-Type to JSON
+                },
+                body: JSON.stringify({ action: "get_reservation" })
+            });
+
+            const reservation = await ReservationSessionRes.json();
+            if (reservation.vehicle) goToAddOns();
+            else $(`section[data-step="${step}"]`).first().show();
+        } else {
+            $(".booking-flow-section").hide();
+            $(`section[data-step="${step}"]`).first().show();
+        }
     });
 
     $(".vehicle-container .continue-btn").on('click', async function () {
@@ -183,9 +197,67 @@ $(function () {
             </table>
         `);
 
-        const totalAddOnsCost = reservation.add_ons ? Object.values(reservation.add_ons).reduce((sum, addOn) => sum + parseInt(addOn.cost), 0) : 0;
+        const totalAddOnsCost = getAddOnsSubTotal(reservation);
 
-        $("#reservation-summary .estimated-total span:last-child").text(makePriceString(totalAddOnsCost + (priceDay * rate.days)));
+        if (reservation.add_ons) {
+            let rows = '', html = '', count = 0;
+            const days = reservation?.itinerary?.days;
+
+            for (const id in reservation.add_ons) {
+                count++;
+                const addOn = reservation.add_ons[id];
+                let addOnRate = addOn.cost;
+                let nameTdString = `1 x ${addOn.name}`;
+                if (addOn.fixed_price !== "1") nameTdString += ` for ${days || 1} day(s)`;
+                if (addOn.name === "Collision Insurance") {
+                    if (reservation.vehicle) {
+                        addOnRate = reservation.vehicle.insurance;
+                    } else {
+                        addOnRate = 0;
+                    }
+                }
+                rows += `
+                    <tr data-id="${addOn.id}">
+                        <td>${nameTdString}</td>
+                        <td>${makePriceString(addOnRate)}</td>
+                        <td>${makePriceString(getAddOnCostForTotalDays(addOn, days, reservation.vehicle))}</td>
+                    </tr>
+                `;
+            }
+
+            if (rows.length) {
+                html = `
+                <h6>Add-ons</h6>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Rate</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows}
+                        <tr>
+                            <td>Add-ons Subtotal</td>
+                            <td></td>
+                            <td>${makePriceString(totalAddOnsCost)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `
+            } else {
+                html = `
+                <h6>Add-ons</h6>
+                <div><span>--</span><span>--</span><span>--</span></div>
+            `;
+            }
+
+            $("#reservation-summary div.add-ons.summary").html(html);
+        }
+
+        const rentalSubtotal = parseInt(priceDay) * rate.days;
+        $("#reservation-summary .estimated-total span:last-child").text(makePriceString(totalAddOnsCost + rentalSubtotal));
 
         goToAddOns();
     });
@@ -227,13 +299,22 @@ $(function () {
         for (const id in reservation.add_ons) {
             count++;
             const addOn = reservation.add_ons[id];
+            let addOnRate = addOn.cost;
             let nameTdString = `1 x ${addOn.name}`;
             if (addOn.fixed_price !== "1") nameTdString += ` for ${days} day(s)`;
+            if (addOn.name === "Collision Insurance") {
+                if (reservation.vehicle) {
+                    addOnRate = reservation.vehicle.insurance;
+                } else {
+                    addOnRate = 0;
+                }
+            }
+
             rows += `
                 <tr data-id="${addOn.id}">
                     <td>${nameTdString}</td>
-                    <td>${makePriceString(addOn.cost)}</td>
-                    <td>${makePriceString(getAddOnCostForTotalDays(addOn, days))}</td>
+                    <td>${makePriceString(addOnRate)}</td>
+                    <td>${makePriceString(getAddOnCostForTotalDays(addOn, days, reservation.vehicle))}</td>
                 </tr>
             `;
 
@@ -272,7 +353,6 @@ $(function () {
         }
 
         const rentalSubtotal = parseInt(priceDay) * days;
-
         $("#reservation-summary div.add-ons.summary").html(html);
         $(".reservation-step.vehicle-add-on .body > div:last-child p").html(spans || "--");
         $("#reservation-summary .estimated-total span:last-child").text(makePriceString(totalAddOnsCost + rentalSubtotal));
@@ -287,9 +367,10 @@ $(function () {
         }
     });
 
-    $(".change-car-btn, .car.summary > div").off('click').on('click', function () {
-        $(".reservation-step.vehicle-add-on .header").trigger('click');
-        $("section[data-step]").hide();
+    $(".change-car-btn, .car.summary > div").on('click', function () {
+        $(".reservation-step").removeClass('active');
+        $(".reservation-step.vehicle-add-on").addClass('active');
+        $(".booking-flow-section").hide();
         $("#vehicle-selection-section").show();
     });
 
@@ -398,13 +479,21 @@ $(function () {
                 for (const id in reservation.add_ons) {
                     count++;
                     const addOn = reservation.add_ons[id];
+                    let addOnRate = addOn.cost;
                     let nameTdString = `1 x ${addOn.name}`;
                     if (addOn.fixed_price !== "1") nameTdString += ` for ${reservation.itinerary.days} day(s)`;
+                    if (addOn.name === "Collision Insurance") {
+                        if (reservation.vehicle) {
+                            addOnRate = reservation.vehicle.insurance;
+                        } else {
+                            addOnRate = 0;
+                        }
+                    }
                     rows += `
                         <tr data-id="${addOn.id}">
                             <td>${nameTdString}</td>
-                            <td>${makePriceString(addOn.cost)}</td>
-                            <td>${makePriceString(getAddOnCostForTotalDays(addOn, reservation.itinerary.days))}</td>
+                            <td>${makePriceString(addOnRate)}</td>
+                            <td>${makePriceString(getAddOnCostForTotalDays(addOn, reservation.itinerary.days, reservation.vehicle))}</td>
                         </tr>
                     `;
                 }
@@ -439,8 +528,8 @@ $(function () {
 
                 $("#reservation-summary div.add-ons.summary").html(html);
             }
-
-            $("#reservation-summary .estimated-total span:last-child").text(makePriceString(totalAddOnsCost + (priceDay * rate.days)));
+            const rentalSubtotal = parseInt(priceDay) * rate.days;
+            $("#reservation-summary .estimated-total span:last-child").text(makePriceString(totalAddOnsCost + rentalSubtotal));
 
             goToAddOns();
         }
@@ -664,7 +753,7 @@ function getDayFromDate(dateStr) {
 }
 
 function goToAddOns() {
-    $("#vehicle-selection-section").hide();
+    $(".booking-flow-section").hide();
     $("#vehicle-add-ons").show();
 }
 
@@ -677,14 +766,21 @@ function getDifferenceInDays(pickUpDate, returnDate) {
 }
 
 function makePriceString(rate, days = 1, currency = 'USD') {
+    if (!rate) rate = 0;
     // Currency can only be USD or EC
     if (currency !== 'USD' && currency !== 'EC') currency = "USD";
     return `$${currency}${parseInt(rate) * days}`;
 }
 
-function getAddOnCostForTotalDays(addOn, days = 1) {
+function getAddOnCostForTotalDays(addOn, days = 1, vehicle = undefined) {
     let newCost = Number(addOn.cost);
-    if (addOn.fixed_price !== "1") newCost *= days;
+    if (addOn.name === "Collision Insurance") {
+        if (vehicle) {
+            newCost = Number(vehicle.insurance) * days;
+        } else {
+            newCost = 0;
+        }
+    }
     return newCost;
 }
 
@@ -698,7 +794,7 @@ function getAddOnsSubTotal(reservation) {
 
         for (const id in reservation.add_ons) {
             const addOn = reservation.add_ons[id];
-            subTotal += getAddOnCostForTotalDays(addOn, days);
+            subTotal += getAddOnCostForTotalDays(addOn, days, reservation.vehicle);
         }
     }
 

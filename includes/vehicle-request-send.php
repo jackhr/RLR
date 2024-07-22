@@ -44,7 +44,7 @@ try {
     if (isset($discount)) {
         $price_day = (int)$reservation['discount']['price_USD'];
     }
-    $sub_total = ($price_day * $days) + getAddOnsSubTotal($add_ons, $days);
+    $sub_total = ($price_day * $days) + getAddOnsSubTotal($add_ons, $days, null, $vehicle);
     $timestamp = time();
     $pick_up_ts = ((int)$itinerary['pickUpDate']['ts'] / 1000);
     $drop_off_ts = ((int)$itinerary['returnDate']['ts'] / 1000);

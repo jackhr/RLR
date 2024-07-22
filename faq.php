@@ -34,7 +34,7 @@ include_once 'includes/header.php';
                     <div class="faq-toggle"></div>
                     <span class="faq-question">What are the collision damage insurance rates for your vehicles?</span>
                 </div>
-                <p class="faq-answer">Insurance base cost is USD$10/day.  If applicable, a premium will be added to your bill after you place your order.  Please see full rates for all vehicles below.<br><br><b>USD$10/day:</b> <i>Toyota Vitz / Toyota Allion / Toyota Yaris / Toyota Corolla</i><br><br><b>USD$12/day:</b> <i>Toyota RAV4 / Mazda CX-5 / Toyota Rush / Kia Seltos / Toyota Raize / Kia Sportage</i><br><br><b>USD$15/day:</b> <i>Jeep Wrangler / Toyota Estima / Toyota Hilux</i><br><br><b>USD$20/day:</b> <i>Toyota Prado / Toyota Fortuner</i></p>
+                <p class="faq-answer">Insurance base cost is USD$10/day. If applicable, a premium will be added to your bill after you place your order. Please see full rates for all vehicles below.<br><br><b>USD$10/day:</b> <i>Toyota Vitz / Toyota Allion / Toyota Yaris / Toyota Corolla</i><br><br><b>USD$12/day:</b> <i>Toyota RAV4 / Mazda CX-5 / Toyota Rush / Kia Seltos / Toyota Raize / Kia Sportage</i><br><br><b>USD$15/day:</b> <i>Jeep Wrangler / Toyota Estima / Toyota Hilux</i><br><br><b>USD$20/day:</b> <i>Toyota Prado / Toyota Fortuner</i></p>
             </div>
             <div class="faq">
                 <div class="faq-top">

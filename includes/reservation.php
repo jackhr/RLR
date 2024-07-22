@@ -78,6 +78,10 @@ if ($data['action'] === 'remove_add_on') {
     $data = $_SESSION['reservation'];
 }
 
+if ($data['action'] === 'get_reservation') {
+    $data = $_SESSION['reservation'];
+}
+
 if ($data['action'] === 'reset_reservation') {
     unset($_SESSION['reservation']);
 }
