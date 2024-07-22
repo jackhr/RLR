@@ -92,7 +92,7 @@ function getAddOnsSubTotal($add_ons = null, $days = null, $itinerary = null, $ve
     return $sub_total;
 }
 
-function generateEmailBody($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key)
+function generateEmailBody($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal)
 {
     function generateAddress($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email)
     {
@@ -100,6 +100,20 @@ function generateEmailBody($first_name, $last_name, $country_region, $street, $t
     }
 
     $fontFamily = 'font-family:"Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;';
+
+    $add_ons_rows = "";
+
+    foreach ($add_ons as $add_on) {
+        $add_on_cost = getAddOnCostForTotalDays($add_on, $days, $vehicle);
+        $quantity = $add_on['fixed_price'] !== "1" ? $days : 1;
+        $add_ons_rows .= '<tr>
+            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;word-wrap:break-word">' . $add_on['name'] . '</td>
+            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">' . $quantity . '</td>
+            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">
+                <span><u></u>USD<span>$</span>' . $add_on_cost . '<u></u></span>
+            </td>
+        </tr>';
+    }
 
     $body = '
     
@@ -147,21 +161,10 @@ function generateEmailBody($first_name, $last_name, $country_region, $street, $t
                                                                             <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;word-wrap:break-word">' . $vehicle['name'] . '</td>
                                                                             <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">' . $days . ' days</td>
                                                                             <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">
-                                                                                <span><u></u>USD<span>$</span>' . ($vehicle['price_day_USD'] * $days) . '<u></u></span>
+                                                                                <span><u></u>USD<span>$</span>' . $vehicle_subtotal . '<u></u></span>
                                                                             </td>
-                                                                        </tr>';
-    foreach ($add_ons as $add_on) {
-        $add_on_cost = getAddOnCostForTotalDays($add_on, $days, $vehicle);
-        $quantity = $add_on['fixed_price'] !== "1" ? $days : 1;
-        $body .= '                                                      <tr>
-                                                                            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;word-wrap:break-word">' . $add_on['name'] . '</td>
-                                                                            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">' . $quantity . '</td>
-                                                                            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif">
-                                                                                <span><u></u>USD<span>$</span>' . $add_on_cost . '<u></u></span>
-                                                                            </td>
-                                                                        </tr>';
-    }
-    $body .= '
+                                                                        </tr>
+                                                                        ' . $add_ons_rows . '
                                                                     </tbody>
                                                                     <tfoot>
                                                                         <tr>

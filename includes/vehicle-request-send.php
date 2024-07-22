@@ -40,11 +40,12 @@ try {
 
     // Caclulate what is needed
     $days = $itinerary['days'];
-    $price_day = (int)$vehicle['price_day_USD'];
+    $price_day = (int)$vehicle['base_price_USD'];
     if (isset($discount)) {
-        $price_day = (int)$reservation['discount']['price_USD'];
+        $price_day = (int)$discount['price_USD'];
     }
-    $sub_total = ($price_day * $days) + getAddOnsSubTotal($add_ons, $days, null, $vehicle);
+    $vehicle_subtotal = $price_day * $days;
+    $sub_total = $vehicle_subtotal + getAddOnsSubTotal($add_ons, $days, null, $vehicle);
     $timestamp = time();
     $pick_up_ts = ((int)$itinerary['pickUpDate']['ts'] / 1000);
     $drop_off_ts = ((int)$itinerary['returnDate']['ts'] / 1000);
@@ -80,13 +81,13 @@ try {
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
 
-    $body = generateEmailBody($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key);
+    $body = generateEmailBody($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal);
 
     // Send email to client
     $mail_res_client = mail($email, $subject, $body, $headers);
 
     // Send email to Admin
-    $to = "info@rlrentals.com,jc2o@mac.com,jrainey@tropicalstudios.com";
+    $to = "info@rlrentals.com,jrainey@tropicalstudios.com,jc2o@mac.com";
     $mail_res_admin = mail($to, $subject, $body, $headers);
 
     session_destroy();

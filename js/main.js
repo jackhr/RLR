@@ -98,6 +98,10 @@ $(function () {
         const step = $(this).data('step');
         $(".reservation-step").removeClass('active');
         $(this).addClass('active');
+        const goToFirstStep = () => {
+            $(".booking-flow-section").hide();
+            $(`section[data-step="${step}"]`).first().show();
+        };
 
         if (step === 2) {
             const ReservationSessionRes = await fetch('/includes/reservation.php', {
@@ -109,11 +113,10 @@ $(function () {
             });
 
             const reservation = await ReservationSessionRes.json();
-            if (reservation.vehicle) goToAddOns();
-            else $(`section[data-step="${step}"]`).first().show();
+            if (reservation.vehicle) return goToAddOns();
+            goToFirstStep();
         } else {
-            $(".booking-flow-section").hide();
-            $(`section[data-step="${step}"]`).first().show();
+            goToFirstStep();
         }
     });
 
@@ -191,6 +194,10 @@ $(function () {
                     <tr>
                         <td>${rate.days}</td>
                         <td>${rateHTML}</td>
+                        <td>${rate.subtotal}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Rental Subtotal</td>
                         <td>${rate.subtotal}</td>
                     </tr>
                 </tbody>
@@ -465,6 +472,10 @@ $(function () {
                         <tr>
                             <td>${rate.days}</td>
                             <td>${rateHTML}</td>
+                            <td>${rate.subtotal}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Rental Subtotal</td>
                             <td>${rate.subtotal}</td>
                         </tr>
                     </tbody>
