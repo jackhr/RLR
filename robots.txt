@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /includes/env.php
+Disallow: /archive%202024-07-22
