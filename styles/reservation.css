@@ -383,6 +383,10 @@
     fill : var(--primary);
 }
 
+.vehicle-container div.center>div:last-child>div svg.add-stroke {
+    stroke: var(--primary);
+}
+
 .vehicle-container.active div.center>div:last-child>div svg {
     fill: var(--white);
 }
@@ -450,12 +454,14 @@
 .more-add-on-info span {
     font-size     : 11px;
     text-transform: uppercase;
-    border-bottom : solid 1px var(--grey-dark);
+    border-bottom : solid 1px var(--primary);
     font-weight   : 500;
+    color         : var(--primary);
 }
 
 .more-add-on-info svg {
-    width: 14px;
+    width : 14px;
+    stroke: var(--primary);
 }
 
 .add-on-container.viewing-info svg {
@@ -616,6 +622,9 @@
     .vehicle-container div.center>div:last-child {
         width          : 100%;
         justify-content: center;
+        flex-wrap      : wrap;
+        max-width      : 330px;
+        margin         : auto;
     }
 
     .vehicle-container div.right {
