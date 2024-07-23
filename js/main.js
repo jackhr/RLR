@@ -57,6 +57,8 @@ $(function () {
 
         const returnToSameLocation = $("#return-to-same-location").prop('checked');
         const pickUpLocation = $(".pick-up .custom-select-options span.selected").text();
+        const pickUpTS = STATE.pickUpFP.selectedDates[0]?.getTime?.();
+        const returnTS = STATE.returnFP.selectedDates[0]?.getTime?.();
 
         const data = {
             action: "itinerary",
@@ -78,14 +80,15 @@ $(function () {
                 value: STATE.returnFP.input.value,
                 altValue: STATE.returnFP.altInput.value
             },
-            step: 2
+            step: 2,
+            days: getDifferenceInDays(pickUpTS, returnTS)
         };
-
+        
         const formDataIsValid = handleInvalidFormData(data, "itinerary");
 
         if (!formDataIsValid) return;
 
-        location.href = `/book-now.php?itinerary[pickUpLocation]=${data.pickUpLocation}&itinerary[returnLocation]=${data.returnLocation}&itinerary[returnToSameLocation][checked]=${returnToSameLocation + 0}&itinerary[returnToSameLocation][value]=${returnToSameLocation ? "on" : "off"}&itinerary[pickUpDate][date]=${data.pickUpDate.date}&itinerary[pickUpDate][ts]=${data.pickUpDate.ts}&itinerary[pickUpDate][value]=${data.pickUpDate.value}&itinerary[pickUpDate][altValue]=${data.pickUpDate.altValue}&itinerary[returnDate][date]=${data.returnDate.date}&itinerary[returnDate][ts]=${data.returnDate.ts}&itinerary[returnDate][value]=${data.returnDate.value}&itinerary[returnDate][altValue]=${data.returnDate.altValue}&step=2`;
+        location.href = `/book-now.php?itinerary[pickUpLocation]=${data.pickUpLocation}&itinerary[returnLocation]=${data.returnLocation}&itinerary[returnToSameLocation][checked]=${returnToSameLocation + 0}&itinerary[returnToSameLocation][value]=${returnToSameLocation ? "on" : "off"}&itinerary[pickUpDate][date]=${data.pickUpDate.date}&itinerary[pickUpDate][ts]=${data.pickUpDate.ts}&itinerary[pickUpDate][value]=${data.pickUpDate.value}&itinerary[pickUpDate][altValue]=${data.pickUpDate.altValue}&itinerary[returnDate][date]=${data.returnDate.date}&itinerary[returnDate][ts]=${data.returnDate.ts}&itinerary[returnDate][value]=${data.returnDate.value}&itinerary[returnDate][altValue]=${data.returnDate.altValue}&step=2&itinerary[days]=${data.days}`;
     });
 
     $(".faq").on('click', function () {
