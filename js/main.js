@@ -83,7 +83,7 @@ $(function () {
             step: 2,
             days: getDifferenceInDays(pickUpTS, returnTS)
         };
-        
+
         const formDataIsValid = handleInvalidFormData(data, "itinerary");
 
         if (!formDataIsValid) return;
@@ -128,14 +128,12 @@ $(function () {
 
         const id = vehicleContainer.data('vehicle-id');
         const name = vehicleContainer.find('.vehicle-name').text();
-        const type = vehicleContainer.find('.vehicle-type').text();
         const imgSrc = vehicleContainer.children('img').attr('src');
         const data = {
             action: "vehicle",
             step: 2,
             id,
             name,
-            type,
             imgSrc
         };
 
@@ -150,7 +148,7 @@ $(function () {
         const reservation = await ReservationSessionRes.json();
 
         await Swal.fire({
-            title: `Choosing ${name} (${type})...`,
+            title: `Choosing ${name} (${reservation.vehicle.type})...`,
             timer: 1500,
             didOpen: () => Swal.showLoading()
         });
@@ -160,9 +158,11 @@ $(function () {
             .addClass('active')
             .find('.continue-btn').text('CONTINUE');
 
-        $(".reservation-step.vehicle-add-on .body>div:first h6, #reservation-summary>h5").text(name);
-        $(".reservation-step.vehicle-add-on .body>div:first p, #reservation-summary>h6").text(type);
+        const insuranceStr = `$${reservation.vehicle.insurance}/day`;
 
+        $(".reservation-step.vehicle-add-on .body>div:first h6, #reservation-summary>h5").text(name);
+        $(".reservation-step.vehicle-add-on .body>div:first p, #reservation-summary>h6").text(`${reservation.vehicle.type} - USD${insuranceStr} Insurance`);
+        $('.add-on-container[data-add-on-name="Collision Insurance"] h2').text(`Collision Insurance - ${insuranceStr}`);
         $("#reservation-summary div.car.summary").html(`<img src="${imgSrc}" alt="${name}">`);
 
         let priceDay = Number(reservation.vehicle.base_price_USD);

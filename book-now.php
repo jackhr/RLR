@@ -329,10 +329,16 @@ if ($testing) {
             <div class="left">
                 <div id="add-ons">
                     <?php foreach ($add_ons_arr as $add_on) { ?>
-                        <div class="add-on-container" data-id="<?php echo $add_on['id']; ?>">
+                        <div class="add-on-container" data-id="<?php echo $add_on['id']; ?>" data-add-on-name="<?php echo $add_on['name']; ?>">
                             <div class="top">
                                 <div class="left">
-                                    <h2><?php echo $add_on['name']; ?></h2>
+                                    <?php
+                                    $add_on_text = $add_on['name'];
+                                    if ($add_on['name'] === "Collision Insurance" && isset($vehicle)) {
+                                        $add_on_text .= " - \${$vehicle['insurance']}/day";
+                                    }
+                                    ?>
+                                    <h2><?php echo $add_on_text; ?></h2>
                                     <div class="more-add-on-info">
                                         <span>More Information</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down">

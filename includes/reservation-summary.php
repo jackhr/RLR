@@ -79,7 +79,7 @@ if (!!$order_request) {
     <?php } ?>
 
     <h5><?php echo $vehicle_name; ?></h5>
-    <h6><?php echo $vehicle_type; ?></h6>
+    <h6><?php echo $vehicle_type . (isset($vehicle) ? " - USD\${$vehicle['insurance']}/day Insurance" : ""); ?></h6>
 
     <div class="car summary">
         <?php if (isset($vehicle)) { ?>
