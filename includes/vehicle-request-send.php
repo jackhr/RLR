@@ -21,6 +21,7 @@ try {
 
     // Get data sent via front end fetch request
 
+    $hotel = $data["hotel"];
     $first_name = $data["first-name"];
     $last_name = $data["last-name"];
     $driver_license = $data["driver-license"];
@@ -81,7 +82,7 @@ try {
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
 
-    $body = generateEmailBody($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal);
+    $body = generateEmailBody($hotel, $first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal);
 
     // Send email to client
     $mail_res_client = mail($email, $subject, $body, $headers);

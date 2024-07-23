@@ -92,7 +92,7 @@ function getAddOnsSubTotal($add_ons = null, $days = null, $itinerary = null, $ve
     return $sub_total;
 }
 
-function generateEmailBody($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal)
+function generateEmailBody($hotel, $first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal)
 {
     function generateAddress($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email)
     {
@@ -167,6 +167,10 @@ function generateEmailBody($first_name, $last_name, $country_region, $street, $t
                                                                         ' . $add_ons_rows . '
                                                                     </tbody>
                                                                     <tfoot>
+                                                                        <tr>
+                                                                            <th scope="row" colspan="2" style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">Hotel</th>
+                                                                            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">' . ($hotel ?? "--") . '</td>
+                                                                        </tr>
                                                                         <tr>
                                                                             <th scope="row" colspan="2" style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">Pickup date</th>
                                                                             <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">' . $itinerary['pickUpDate']['altValue'] . '</td>

@@ -586,6 +586,7 @@ $(function () {
 
     $("#final-details-form .continue-btn").on('click', async function () {
         const data = {
+            "hotel": $('#final-details-form input[name="hotel"]').val(),
             "first-name": $('#final-details-form input[name="first-name"]').val(),
             "last-name": $('#final-details-form input[name="last-name"]').val(),
             "driver-license": $('#final-details-form input[name="driver-license"]').val(),
@@ -732,12 +733,21 @@ function handleInvalidFormData(data, section) {
 
     } else if (section === "final_details") {
 
-        if (data.first_name === '') {
+        if (data['first-name'] === '') {
             text = 'Please enter your first name.';
             element = $('#final-details-form input[name="first-name"]');
-        } else if (data.last_name === '') {
+        } else if (data['last-name'] === '') {
             text = 'Please enter your last name.';
             element = $('#final-details-form input[name="last-name"]');
+        } else if (data['country-region'] === '') {
+            text = 'Please enter your country or region.';
+            element = $('#final-details-form input[name="country-region"]');
+        } else if (data.street === '') {
+            text = 'Please enter your street address.';
+            element = $('#final-details-form input[name="street"]');
+        } else if (data['town-city'] === '') {
+            text = 'Please enter your town or city.';
+            element = $('#final-details-form input[name="town-city"]');
         } else if (data.phone === '') {
             text = 'Please enter your phone number.';
             element = $('#final-details-form input[name="phone"]');

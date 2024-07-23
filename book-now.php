@@ -190,7 +190,9 @@ if ($testing) {
                                 </svg>
                                 <div class="custom-select-options">
                                     <span <?php echo $pick_up_location === "Choose Office" ? 'class="selected"' : "" ?>>Choose Office</span>
+                                    <span <?php echo $pick_up_location === "Your Hotel" ? 'class="selected"' : "" ?>>Your Hotel</span>
                                     <span <?php echo $pick_up_location === "Airport" ? 'class="selected"' : "" ?>>Airport</span>
+                                    <span <?php echo $pick_up_location === "Main Office" ? 'class="selected"' : "" ?>>Main Office</span>
                                 </div>
                             </div>
                         </div>
@@ -366,6 +368,10 @@ if ($testing) {
             <div class="left">
                 <div id="final-details-form">
                     <h2>Contact Info</h2>
+                    <div class="input-container">
+                        <h6>Hotel in Antigua (optional)</h6>
+                        <input type="text" name="hotel">
+                    </div>
                     <div class="mutiple-input-container">
                         <div class="input-container">
                             <h6>First Name<sup>*</sup></h6>
@@ -382,17 +388,17 @@ if ($testing) {
                             <input type="text" name="driver-license">
                         </div>
                         <div class="input-container">
-                            <h6>Country / Region (Optional)</h6>
-                            <input type="text" name="country-region">
+                            <h6>Country / Region<sup>*</sup></h6>
+                            <input class="form-input" type="text" name="country-region">
                         </div>
                     </div>
                     <div class="input-container">
-                        <h6>Street address (optional)</h6>
-                        <input type="text" name="street">
+                        <h6>Street address<sup>*</sup></h6>
+                        <input class="form-input" type="text" name="street">
                     </div>
                     <div class="input-container">
-                        <h6>Town / City (optional)</h6>
-                        <input type="text" name="town-city">
+                        <h6>Town / City<sup>*</sup></h6>
+                        <input class="form-input" type="text" name="town-city">
                     </div>
                     <div class="input-container">
                         <h6>State / County (optional)</h6>
