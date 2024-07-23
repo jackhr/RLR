@@ -7,7 +7,8 @@ const STATE = {
         minDate: "today",
     },
     pickUpFP: null,
-    returnFP: null
+    returnFP: null,
+    emailRegEx: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 };
 
 $(function () {
@@ -601,6 +602,32 @@ $(function () {
 
         if (!formDataIsValid) return;
 
+        const ReservationSessionRes = await fetch('/includes/reservation.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',  // Set Content-Type to JSON
+            },
+            body: JSON.stringify({ action: "get_reservation" })
+        });
+
+        const reservation = await ReservationSessionRes.json();
+        if (!reservation.itinerary) {
+            Swal.fire({
+                icon: "warning",
+                title: "Incomplete Booking",
+                text: "Please complete the itinerary section of the booking before submitting."
+            });
+            return $(".reservation-step.itinerary").trigger('click');
+        }
+        if (!reservation.vehicle) {
+            Swal.fire({
+                icon: "warning",
+                title: "Incomplete Booking",
+                text: "Please complete the vehicle selection section of the booking before submitting."
+            });
+            return $(".reservation-step.vehicle-add-on").trigger('click');
+        }
+
         Swal.fire({
             title: "Sending request...",
             didOpen: () => Swal.showLoading()
@@ -711,6 +738,9 @@ function handleInvalidFormData(data, section) {
         } else if (data.email === '') {
             text = 'Please enter your email address.';
             element = $('#final-details-form input[name="email"]');
+        } else if (!STATE.emailRegEx.test(data.email)) {
+            text = 'Please enter a valid email address.';
+            element = $('#final-details-form input[name="email"]');
         }
 
     } else if (section === "contact") {
@@ -720,6 +750,9 @@ function handleInvalidFormData(data, section) {
             element = $('#contact-form-section input[name="name"]');
         } else if (data.email === '') {
             text = 'Please enter your email address.';
+            element = $('#contact-form-section input[name="email"]');
+        } else if (!STATE.emailRegEx.test(data.email)) {
+            text = 'Please enter a valid email address.';
             element = $('#contact-form-section input[name="email"]');
         } else if (data.message === '') {
             text = 'Please enter your message.';
