@@ -87,7 +87,7 @@ try {
     $mail_res_client = mail($email, $subject, $body, $headers);
 
     // Send email to Admin
-    $to = "info@rlrentals.com,jrainey@tropicalstudios.com,jc2o@mac.com";
+    $to = isset($testing_email_string) ? $testing_email_string : $email_string;
     $mail_res_admin = mail($to, $subject, $body, $headers);
 
     session_destroy();
