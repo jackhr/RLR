@@ -49,6 +49,16 @@ include_once 'includes/header.php';
                 </ul>
             </div>
         </div>
+
+        <div id="about-carousel">
+            <div class="slider">
+                <div><img src="/assets/images/misc/barbuda-beach-couple.jpg" alt=""></div>
+                <div><img src="/assets/images/misc/carnival-zoom-girl.jpg" alt=""></div>
+                <div><img src="/assets/images/misc/darkwood-beach.jpg" alt=""></div>
+                <div><img src="/assets/images/misc/jolly-harbour-golf-course.jpg" alt=""></div>
+                <div><img src="/assets/images/misc/silver-car-below-mango-trees.jpg" alt=""></div>
+            </div>
+        </div>
     </div>
 </section>
 

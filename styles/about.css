@@ -78,6 +78,48 @@
     color                  : var(--primary);
 }
 
+#about-carousel {
+    position : relative;
+    width    : 100%;
+    max-width: 600px;
+    margin   : auto;
+}
+
+.arrow-container {
+    background     : #ffffffa6 !important;
+    border-radius  : 50%;
+    display        : flex !important;
+    align-items    : center !important;
+    justify-content: center !important;
+    width          : 28px !important;
+    height         : 28px !important;
+    z-index        : 100;
+    opacity        : 0.75;
+    transition     : opacity 0.3s;
+}
+
+.arrow-container:hover {
+    opacity: 1;
+}
+
+.arrow-container::before {
+    content: none !important;
+}
+
+.arrow-container svg {
+    stroke      : var(--primary);
+    stroke-width: 3;
+    width       : 100%;
+}
+
+.slick-prev {
+    left: 12px !important;
+}
+
+.slick-next {
+    right: 12px !important;
+}
+
 @media screen and (max-width: 991px) {
 
     #about-section div.inner {

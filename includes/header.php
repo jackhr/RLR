@@ -42,9 +42,12 @@ $title = isset($title_suffix) ? $base_title .= " | " . $title_suffix : $title;
     <link type="text/css" rel="stylesheet" href="/plugins/sweetalert2/styles/sweetalert2.min.css">
     <link type="text/css" rel="stylesheet" href="/plugins/flatpickr/styles/flatpickr.min.css">
     <link type="text/css" rel="stylesheet" href="/plugins/flatpickr/styles/theme.min.css">
+    <link type="text/css" rel="stylesheet" href="/plugins/slick/slick/slick.css">
+    <link type="text/css" rel="stylesheet" href="/plugins/slick/slick/slick-theme.css">
     <script src="/plugins/jquery/jquery-3.7.1.min.js"></script>
     <script src="/plugins/sweetalert2/js/sweetalert2.all.min.js"></script>
     <script src="/plugins/flatpickr/js/flatpickr.v4.6.13.min.js"></script>
+    <script src="/plugins/slick/slick/slick.min.js"></script>
     <!-- END PLUGINS -->
 
 </head>
@@ -89,6 +92,5 @@ $title = isset($title_suffix) ? $base_title .= " | " . $title_suffix : $title;
                     <a href="/contact.php">Contact</a>
                 </nav>
             </div>
-
         </div>
     </header>
