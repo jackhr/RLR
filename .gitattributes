@@ -6,7 +6,12 @@ assets/images/bg/rendezvous-bay.jpg filter=lfs diff=lfs merge=lfs -text
 assets/images/bg/shorline-gallivanting.jpg filter=lfs diff=lfs merge=lfs -text
 assets/images/bg/side-view-happy-friends-campervan.jpg filter=lfs diff=lfs merge=lfs -text
 assets/images/bg/sunset-panorama.jpg filter=lfs diff=lfs merge=lfs -text
+assets/images/misc/barbuda-beach-couple.jpg filter=lfs diff=lfs merge=lfs -text
+assets/images/misc/carnival-zoom-girl.jpg filter=lfs diff=lfs merge=lfs -text
+assets/images/misc/darkwood-beach.jpg filter=lfs diff=lfs merge=lfs -text
 assets/images/misc/harbour-antigua-yacht-show.jpg filter=lfs diff=lfs merge=lfs -text
+assets/images/misc/jolly-harbour-golf-course.jpg filter=lfs diff=lfs merge=lfs -text
+assets/images/misc/silver-car-below-mango-trees.jpg filter=lfs diff=lfs merge=lfs -text
 assets/images/misc/st-johns.jpg filter=lfs diff=lfs merge=lfs -text
 assets/images/vehicles/jeep_wrangler.jpg filter=lfs diff=lfs merge=lfs -text
 assets/images/vehicles/kia_seltos.jpg filter=lfs diff=lfs merge=lfs -text
