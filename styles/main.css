@@ -7,6 +7,7 @@
     --secondary       : #6c98e1;
     --black           : #232628;
     --white           : #f5f5f5;
+    --yellow          : #eec357;
     --grey-x-light    : #cdcdcd;
     --grey-light      : #888888;
     --grey-dark       : #676767;
@@ -520,8 +521,24 @@ html.viewing-hamburger-menu #hamburger-nav {
 }
 
 #landing-cars-section div.inner {
-    padding-top   : 80px;
+    padding-top   : 68px;
     padding-bottom: 50px;
+}
+
+#landing-cars-section div.inner>h1 {
+    margin     : 0;
+    color      : var(--white);
+    font-size  : 30px;
+    line-height: 50px;
+}
+
+#landing-cars-section div.inner>h2 {
+    text-transform: none;
+    font-style    : italic;
+    color         : var(--yellow);
+    font-size     : 20px;
+    margin        : 10px 0 50px;
+    line-height   : 40px;
 }
 
 #cars {
@@ -562,17 +579,21 @@ html.viewing-hamburger-menu #hamburger-nav {
 }
 
 .car-container .overlay div {
-    transition: all ease-in-out 0.5s;
-    background: var(--primary);
-    height    : 300px;
-    width     : calc(var(--max-width)/4);
-    opacity   : 0;
+    transition   : all ease-in-out 0.5s;
+    background   : var(--primary);
+    opacity      : 0;
+    /* height    : 300px; */
+    /* width     : calc(var(--max-width)/4); */
+    height       : 80%;
+    width        : 80%;
 }
 
 .car-container:hover .overlay div {
-    opacity: 1;
-    height : 450px;
-    width  : calc(var(--max-width)/3);
+    opacity   : 1;
+    /* height : 450px; */
+    /* width  : calc(var(--max-width)/3); */
+    height    : 120%;
+    width     : 120%;
 }
 
 .car-container .top,
@@ -580,6 +601,7 @@ html.viewing-hamburger-menu #hamburger-nav {
     position: relative;
     height  : 50%;
     overflow: hidden;
+    display : flex;
 }
 
 .car-container .top {
@@ -614,6 +636,7 @@ html.viewing-hamburger-menu #hamburger-nav {
     font-size     : 12px;
     padding       : 8px 12px;
     transition    : background-color ease 0.5s;
+    max-width     : 175px;
 }
 
 .car-container:hover .top .left>div {
@@ -667,20 +690,31 @@ html.viewing-hamburger-menu #hamburger-nav {
 }
 
 .car-container img {
-    width     : 100%;
+    width     : auto;
     height    : 100%;
-    object-fit: cover;
+    max-width : 100%;
+    object-fit: contain;
+    margin    : auto;
 }
 
 #cars+a {
-    margin     : 50px auto 0;
-    width      : max-content;
-    font-size  : 16px;
-    padding    : 18px 25px;
-    background : var(--primary);
-    color      : var(--white);
-    cursor     : pointer;
-    font-weight: 500;
+    margin        : 50px auto 0;
+    width         : max-content;
+    font-size     : 16px;
+    padding       : 18px 25px;
+    background    : var(--primary);
+    color         : var(--white);
+    cursor        : pointer;
+    font-weight   : 500;
+    display       : flex;
+    gap           : 14px;
+    text-transform: uppercase;
+    align-items   : center;
+}
+
+#cars+a svg {
+    width: 18px;
+    fill : var(--white);
 }
 
 #testimonial-section div.inner {
@@ -734,37 +768,65 @@ html.viewing-hamburger-menu #hamburger-nav {
 
 #contact-banner {
     background-color: var(--primary);
-    display         : flex;
-    align-items     : center;
     color           : var(--black);
-    height          : 30px;
 }
 
-#contact-banner h1,
+#contact-banner div.inner {
+    padding        : 42px var(--general-padding);
+    width          : 100%;
+    flex-direction : row;
+    justify-content: space-between;
+    align-items    : center;
+}
+
+#contact-banner h1 {
+    margin: 0;
+}
+
+#contact-banner div.inner>div {
+    display       : flex;
+    flex-direction: row-reverse;
+    align-items   : center;
+    gap           : 52px;
+}
+
 #contact-banner a {
-    margin     : 0;
     font-size  : 24px;
     font-weight: 700;
 }
 
 #contact-banner a {
-    margin-left: auto;
-    color      : var(--black);
+    color: var(--black);
 }
 
-#contact-banner div {
+#contact-banner div a:first-child {
     border          : solid 2px var(--white);
     border-radius   : 4px;
     transition      : background-color 0.3s;
     background-color: var(--primary);
     cursor          : pointer;
-    padding         : 12px 18px;
-    margin-left     : 24px;
+    padding         : 8px 18px 8px 13px;
     font-weight     : 600;
+    display         : flex;
+    font-size       : 14px;
+    align-items     : center;
+    gap             : 8px;
+    width           : max-content;
 }
 
-#contact-banner div:hover {
+#contact-banner div a:first-child:hover {
     background-color: var(--white);
+}
+
+#contact-banner div a:first-child svg {
+    width     : 24px;
+    stroke    : var(--primary);
+    fill      : var(--black);
+    transition: all 0.3s;
+}
+
+#contact-banner div a:first-child:hover svg {
+    stroke: var(--white);
 }
 
 footer {
@@ -805,32 +867,34 @@ footer ul {
     letter-spacing : 0.67px;
 }
 
-.footer-logo {
-    height         : 200px;
-    padding        : 12px;
-    display        : flex;
-    align-items    : center;
-    justify-content: center;
-}
-
-.footer-logo div {
-    background: var(--white);
-    padding   : 24px;
-}
-
-.footer-logo img {
-    height: auto;
-    width : 160px;
-}
-
-.footer-contact {
-    align-items: flex-end;
+.footer-contact ul {
+    margin-top: 14px;
 }
 
 footer .contact-link {
     flex-direction: row;
     gap           : 4px;
-    margin-bottom : 12px;
+    font-size     : 14px;
+}
+
+footer .contact-link span:first-child,
+.footer-contact ul li:first-child {
+    color      : #aaa;
+    font-weight: 700;
+}
+
+.footer-service-hours {
+    align-items: center;
+}
+
+.footer-service-hours span:first-of-type {
+    font-weight: 600;
+}
+
+.footer-nav>div {
+    display       : flex;
+    flex-direction: column;
+    margin-left   : auto;
 }
 
 div#copyright {
@@ -880,6 +944,12 @@ table tr td:last-child {
     text-align: right;
 }
 
+@media screen and (max-width: 1010px) {
+    .car-container {
+        width: calc(50% - 15px);
+    }
+}
+
 @media screen and (max-width: 991px) {
     :root {
         --nav-height: 110px;
@@ -912,6 +982,16 @@ table tr td:last-child {
     .feature-container {
         width: 100%;
     }
+
+    #contact-banner div.inner,
+    #contact-banner div.inner>div {
+        flex-direction: column;
+        gap           : 24px;
+    }
+
+    #contact-banner h1 {
+        margin: auto;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -936,7 +1016,7 @@ table tr td:last-child {
         flex-direction: column;
         height        : fit-content;
         text-align    : center;
-        gap           : 18px;
+        gap           : 32px;
         margin        : 30px 0;
     }
 
@@ -945,10 +1025,34 @@ table tr td:last-child {
         align-items: center;
     }
 
-    footer ul {
+    .footer-contact ul {
+        text-align: center;
+    }
+
+    .footer-nav>div {
+        margin: auto;
+    }
+
+    footer h6 {
+        margin: 0 auto 14px;
+    }
+
+    .footer-nav ul {
         display: flex;
         margin : auto;
         gap    : 24px;
     }
 
+}
+
+@media screen and (max-width: 669px) {
+    .car-container {
+        width    : 100%;
+        max-width: 480px;
+    }
+
+    /* .car-container img {
+        width : auto;
+        height: 100%;
+    } */
 }

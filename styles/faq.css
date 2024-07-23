@@ -67,3 +67,11 @@
     line-height  : 22px;
     font-weight  : 500;
 }
+
+#faq-page #contact-banner * {
+    display: none;
+}
+
+#faq-page #contact-banner {
+    height: 30px;
+}
