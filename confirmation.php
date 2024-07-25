@@ -18,10 +18,13 @@ $order_request = mysqli_fetch_assoc($order_request_result);
 $order_request_add_on_query = "SELECT * FROM order_request_add_ons WHERE `order_request_id` = {$order_request['id']}";
 $order_request_add_on_result = mysqli_query($con, $order_request_add_on_query);
 $add_ons = [];
+$has_collion_insurance = false;
 while ($add_on = mysqli_fetch_assoc($order_request_add_on_result)) {
     $add_on_query = "SELECT * FROM add_ons WHERE `id` = {$add_on['add_on_id']}";
     $add_on_result = mysqli_query($con, $add_on_query);
-    $add_ons[] = mysqli_fetch_assoc($add_on_result);
+    $row = mysqli_fetch_assoc($add_on_result);
+    if ($row['name'] === "Collision Insurance") $has_collion_insurance = true;
+    $add_ons[] = $row;
 }
 
 // Get the vehicle
@@ -66,13 +69,22 @@ if (!$order_request) {
 
                 <div id="order-summary">
                     <div class="order-summary-item itinerary">
+                        <?php
+                        $location_str = "<b>{$order_request['pick_up_location']}</b>";
+                        if ($order_request['pick_up_location'] === "Your Hotel") {
+                            $hotel_str = isset($contact_info['hotel']) ? $contact_info['hotel'] : "";
+                            $location_str = "<b>{$order_request['pick_up_location']}:</b> {$hotel_str}";
+                        }
+                        ?>
                         <div class="left">
                             <h6>Pick Up</h6>
                             <p><?php echo date('F d, Y h:i A', strtotime($order_request['pick_up'])); ?></p>
+                            <p><?php echo $location_str; ?></p>
                         </div>
                         <div class="right">
                             <h6>Drop Off</h6>
                             <p><?php echo date('F d, Y h:i A', strtotime($order_request['drop_off'])); ?></p>
+                            <p><?php echo $location_str; ?></p>
                         </div>
                     </div>
                     <div class="order-summary-item vehicle">

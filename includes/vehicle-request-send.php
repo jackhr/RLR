@@ -20,17 +20,16 @@ try {
     }
 
     // Get data sent via front end fetch request
-
-    $hotel = $data["hotel"];
-    $first_name = $data["first-name"];
-    $last_name = $data["last-name"];
+    $first_name = trim($data["first-name"]);
+    $last_name = trim($data["last-name"]);
     $driver_license = $data["driver-license"];
+    $hotel = (is_string($data["hotel"]) && strlen($data["hotel"]) > 0) ? trim($data["hotel"]) : null;
     $country_region = $data["country-region"];
     $street = $data["street"];
     $town_city = $data["town-city"];
     $state_county = $data["state-county"];
-    $phone = $data["phone"];
-    $email = $data["email"];
+    $phone = trim($data["phone"]);
+    $email = trim($data["email"]);
 
     // Get data from session
     $reservation = $_SESSION['reservation'];
@@ -50,9 +49,11 @@ try {
     $timestamp = time();
     $pick_up_ts = ((int)$itinerary['pickUpDate']['ts'] / 1000);
     $drop_off_ts = ((int)$itinerary['returnDate']['ts'] / 1000);
+    $pick_up_location = $itinerary['pickUpLocation'];
+    $drop_off_location = $itinerary['returnLocation'];
 
     // Insert contact info into database
-    $contact_info_query = "INSERT INTO `contact_info` (`first_name`, `last_name`, `driver_license`, `country_or_region`, `street`, `town_or_city`, `state_or_county`, `phone`, `email`) VALUES ('{$first_name}', '{$last_name}', '{$driver_license}', '{$country_region}', '{$street}', '{$town_city}', '{$state_county}', '{$phone}', '{$email}');";
+    $contact_info_query = "INSERT INTO `contact_info` (`first_name`, `last_name`, `driver_license`, `hotel`, `country_or_region`, `street`, `town_or_city`, `state_or_county`, `phone`, `email`) VALUES ('{$first_name}', '{$last_name}', '{$driver_license}', '{$hotel}', '{$country_region}', '{$street}', '{$town_city}', '{$state_county}', '{$phone}', '{$email}');";
     $contact_info_result = mysqli_query($con, $contact_info_query);
     $contact_info_id = mysqli_insert_id($con);
 
@@ -66,7 +67,7 @@ try {
     }
 
     // Insert order request into database
-    $order_request_query = "INSERT INTO `order_requests` (`key`, `pick_up`, `drop_off`, `confirmed`, `contact_info_id`, `sub_total`, `car_id`, `days`) VALUES ('{$key}', FROM_UNIXTIME({$pick_up_ts}), FROM_UNIXTIME({$drop_off_ts}), 0, {$contact_info_id}, '{$sub_total}', {$vehicle['id']}, {$days});";
+    $order_request_query = "INSERT INTO `order_requests` (`key`, `pick_up`, `drop_off`, `pick_up_location`, `drop_off_location`, `confirmed`, `contact_info_id`, `sub_total`, `car_id`, `days`) VALUES ('{$key}', FROM_UNIXTIME({$pick_up_ts}), FROM_UNIXTIME({$drop_off_ts}), `{$pick_up_location}`, `{$drop_off_location}`, 0, {$contact_info_id}, '{$sub_total}', {$vehicle['id']}, {$days});";
     $order_request_result = mysqli_query($con, $order_request_query);
     $order_request_id = mysqli_insert_id($con);
 
@@ -88,10 +89,10 @@ try {
     $mail_res_client = mail($email, $subject, $body, $headers);
 
     // Send email to Admin
-    $to = isset($testing_email_string) ? $testing_email_string : $email_string;
+    $to = isset($debugging_email_string) ? $debugging_email_string : (isset($testing_email_string) ? $testing_email_string : $email_string);
     $mail_res_admin = mail($to, $subject, $body, $headers);
 
-    session_destroy();
+    if ($destory_session_after_ordering === true) session_destroy();
 
     respond([
         "success" => true,
