@@ -14,6 +14,8 @@ $description = "Book a car rental with RL Rentals (Antigua). Choose from a varie
 
 include_once 'includes/header.php';
 
+$see_all_vehicles = $_GET['see-all-vehicles'] == 'true';
+
 $vehicles_arr = [];
 
 $vehicles_query = "SELECT * FROM `vehicles` WHERE `showing` = 1 ORDER BY `base_price_USD`, `name` ASC;";
@@ -106,12 +108,12 @@ if ($testing) {
 ?>
 
 <section class="general-header">
-    <h1>Reservation</h1>
+    <h1>Reservation / Book Now</h1>
 </section>
 
 <section id="reservation-steps">
     <div class="inner">
-        <div class="reservation-step itinerary <?php echo $reservation['step'] == 1 ? "active" : ""; ?>" data-step="1">
+        <div class="reservation-step itinerary <?php echo $reservation['step'] == 1 && !$see_all_vehicles ? "active" : ""; ?>" data-step="1">
             <div class="header">
                 <span>1</span>
                 <h2>Your Itinerary</h2>
@@ -127,7 +129,7 @@ if ($testing) {
                 </div>
             </div>
         </div>
-        <div class="reservation-step vehicle-add-on <?php echo $reservation['step'] == 2 ? "active" : ""; ?>" data-step="2">
+        <div class="reservation-step vehicle-add-on <?php echo $reservation['step'] == 2 || $see_all_vehicles ? "active" : ""; ?>" data-step="2">
             <div class="header">
                 <span>2</span>
                 <h2>Select Vehicle/Add-ons</h2>
@@ -151,7 +153,7 @@ if ($testing) {
                 </div>
             </div>
         </div>
-        <div class="reservation-step reservation <?php echo $reservation['step'] == 3 ? "active" : ""; ?>" data-step="3">
+        <div class="reservation-step reservation <?php echo $reservation['step'] == 3 && !$see_all_vehicles ? "active" : ""; ?>" data-step="3">
             <div class="header">
                 <span>3</span>
                 <h2>Reserve Your Vehicle</h2>
@@ -170,7 +172,7 @@ if ($testing) {
     </div>
 </section>
 
-<section class="booking-flow-section" id="itinerary-section" data-step="1" <?php if ($reservation['step'] != 1) echo 'style="display:none;"'; ?>>
+<section class="booking-flow-section" id="itinerary-section" data-step="1" <?php if ($see_all_vehicles || $reservation['step'] != 1) echo 'style="display:none;"'; ?>>
     <div class="inner">
         <h1>Reserve Your Vehicle</h1>
         <div class="reservation-flow-container">
@@ -252,7 +254,7 @@ if ($testing) {
     </div>
 </section>
 
-<section class="booking-flow-section" id="vehicle-selection-section" data-step="2" <?php echo $reservation['step'] != 2 ? 'style="display:none;"' : (isset($vehicle) ? 'style="display:none;"' : ""); ?>>
+<section class="booking-flow-section" id="vehicle-selection-section" data-step="2" <?php echo $see_all_vehicles ? "" : ($reservation['step'] != 2 ? 'style="display:none;"' : (isset($vehicle) ? 'style="display:none;"' : "")); ?>>
     <div class="inner">
         <h1>Select Vehicle</h1>
         <div id="vehicles">
@@ -324,7 +326,7 @@ if ($testing) {
     </div>
 </section>
 
-<section class="booking-flow-section" id="vehicle-add-ons" data-step="2" <?php echo $reservation['step'] != 2 ? 'style="display:none;"' : (isset($vehicle) ? "" : 'style="display:none;"'); ?>>
+<section class="booking-flow-section" id="vehicle-add-ons" data-step="2" <?php echo $see_all_vehicles || $reservation['step'] != 2 ? 'style="display:none;"' : (isset($vehicle) ? "" : 'style="display:none;"'); ?>>
     <div class="inner">
         <h1>Vehicle Add-ons</h1>
         <div class="reservation-flow-container">
@@ -361,7 +363,7 @@ if ($testing) {
     </div>
 </section>
 
-<section class="booking-flow-section" id="final-section" data-step="3" <?php if ($reservation['step'] != 3) echo 'style="display:none;"'; ?>>
+<section class="booking-flow-section" id="final-section" data-step="3" <?php echo $see_all_vehicles || $reservation['step'] != 3 ? 'style="display:none;"' : ""; ?>>
     <div class="inner">
         <h1>Final Details</h1>
         <div class="reservation-flow-container">
