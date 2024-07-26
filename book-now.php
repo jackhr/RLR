@@ -194,7 +194,6 @@ if ($testing) {
                                     <span <?php echo $pick_up_location === "Choose Location" ? 'class="selected"' : "" ?>>Choose Location</span>
                                     <span <?php echo $pick_up_location === "Your Hotel" ? 'class="selected"' : "" ?>>Your Hotel</span>
                                     <span <?php echo $pick_up_location === "Airport" ? 'class="selected"' : "" ?>>Airport</span>
-                                    <span <?php echo $pick_up_location === "Main Office" ? 'class="selected"' : "" ?>>Main Office</span>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +225,8 @@ if ($testing) {
                                 </svg>
                                 <div class="custom-select-options">
                                     <span <?php echo $return_location === "Choose Location" ? 'class="selected"' : "" ?>>Choose Location</span>
-                                    <span <?php echo $return_location === "Airport" ? 'class="selected"' : "" ?>>Airport</span>
+                                    <span <?php echo $pick_up_location === "Your Hotel" ? 'class="selected"' : "" ?>>Your Hotel</span>
+                                    <span <?php echo $pick_up_location === "Airport" ? 'class="selected"' : "" ?>>Airport</span>
                                 </div>
                             </div>
                         </div>

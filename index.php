@@ -32,7 +32,6 @@ while ($row = mysqli_fetch_assoc($result)) $vehicles_arr[] = $row;
                     <span class="selected">Choose Location</span>
                     <span>Your Hotel</span>
                     <span>Airport</span>
-                    <span>Main Office</span>
                 </div>
             </div>
 
@@ -57,6 +56,7 @@ while ($row = mysqli_fetch_assoc($result)) $vehicles_arr[] = $row;
                 </svg>
                 <div class="custom-select-options">
                     <span class="selected">Choose Location</span>
+                    <span>Your Hotel</span>
                     <span>Airport</span>
                 </div>
             </div>
