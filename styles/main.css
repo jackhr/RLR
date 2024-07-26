@@ -607,12 +607,15 @@ html.viewing-hamburger-menu #hamburger-nav {
 .car-container .top {
     display: flex;
     padding: 0 20px 12px;
+    gap    : 4px;
 }
 
 .car-container .top .left {
     width         : 100%;
     display       : flex;
     flex-direction: column;
+    max-width     : 175px;
+    margin-right  : auto;
 }
 
 .car-container .top .left h1 {
@@ -622,15 +625,15 @@ html.viewing-hamburger-menu #hamburger-nav {
 }
 
 .car-container .top .left h2 {
-    margin   : 0;
-    font-size: 14px;
+    margin        : 4px 0 12px;
+    font-size     : 12px;
+    text-transform: capitalize;
 }
 
 .car-container .top .left>div {
     display       : flex;
     flex-direction: column;
     background    : var(--primary);
-    margin        : auto 24px 0 0;
     color         : var(--white);
     font-weight   : 800;
     font-size     : 12px;
