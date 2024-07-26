@@ -29,11 +29,12 @@ try {
     $state_county = $data["state-county"];
     $phone = trim($data["phone"]);
     $email = trim($data["email"]);
-    $hotel = "NULL";
+    $hotel = null;
+    $hotel_sql_val = "NULL";
     if (is_string($data["hotel"])) {
         if (strlen($data["hotel"]) > 0) {
             $hotel = trim($data["hotel"]);
-            $hotel = "'$hotel'";
+            $hotel_sql_val = "'$hotel'";
         }
     }
 
@@ -59,7 +60,7 @@ try {
     $drop_off_location = $itinerary['returnLocation'];
 
     // Insert contact info into database
-    $contact_info_query = "INSERT INTO `contact_info` (`first_name`, `last_name`, `driver_license`, `hotel`, `country_or_region`, `street`, `town_or_city`, `state_or_county`, `phone`, `email`) VALUES ('{$first_name}', '{$last_name}', '{$driver_license}', {$hotel}, '{$country_region}', '{$street}', '{$town_city}', '{$state_county}', '{$phone}', '{$email}');";
+    $contact_info_query = "INSERT INTO `contact_info` (`first_name`, `last_name`, `driver_license`, `hotel`, `country_or_region`, `street`, `town_or_city`, `state_or_county`, `phone`, `email`) VALUES ('{$first_name}', '{$last_name}', '{$driver_license}', {$hotel_sql_val}, '{$country_region}', '{$street}', '{$town_city}', '{$state_county}', '{$phone}', '{$email}');";
     $contact_info_result = mysqli_query($con, $contact_info_query);
     $contact_info_id = mysqli_insert_id($con);
 

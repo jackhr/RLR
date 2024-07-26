@@ -115,7 +115,7 @@ function generateEmailBody($hotel, $first_name, $last_name, $country_region, $st
         </tr>';
     }
 
-    if ($hotel === "NULL") $hotel = "<i>Not provided</i>";
+    if (is_null($hotel)) $hotel = "<i>Not provided</i>";
 
     $body = '
     
