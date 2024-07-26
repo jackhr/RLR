@@ -20,21 +20,21 @@ try {
     }
 
     // Get data sent via front end fetch request
-    $first_name = trim($data["first-name"]);
-    $last_name = trim($data["last-name"]);
-    $driver_license = $data["driver-license"];
+    $first_name = mysqli_real_escape_string($con, trim($data["first-name"]));
+    $last_name = mysqli_real_escape_string($con, trim($data["last-name"]));
+    $driver_license = mysqli_real_escape_string($con, $data["driver-license"]);
     $country_region = $data["country-region"];
-    $street = $data["street"];
-    $town_city = $data["town-city"];
-    $state_county = $data["state-county"];
-    $phone = trim($data["phone"]);
-    $email = trim($data["email"]);
+    $street = mysqli_real_escape_string($con, $data["street"]);
+    $town_city = mysqli_real_escape_string($con, $data["town-city"]);
+    $state_county = mysqli_real_escape_string($con, $data["state-county"]);
+    $phone = mysqli_real_escape_string($con, trim($data["phone"]));
+    $email = mysqli_real_escape_string($con, trim($data["email"]));
     $hotel = null;
     $hotel_sql_val = "NULL";
     if (is_string($data["hotel"])) {
         if (strlen($data["hotel"]) > 0) {
             $hotel = trim($data["hotel"]);
-            $hotel_sql_val = "'$hotel'";
+            $hotel_sql_val = mysqli_real_escape_string($con, "'$hotel'");
         }
     }
 
