@@ -72,8 +72,8 @@ if (!$order_request) {
                         <?php
                         $location_str = "<b>{$order_request['pick_up_location']}</b>";
                         if ($order_request['pick_up_location'] === "Your Hotel") {
-                            $hotel_str = isset($contact_info['hotel']) ? $contact_info['hotel'] : "";
-                            $location_str = "<b>{$order_request['pick_up_location']}:</b> {$hotel_str}";
+                            $hotel_str = isset($contact_info['hotel']) ? $contact_info['hotel'] : "Not Provided";
+                            $location_str = "<b>{$order_request['pick_up_location']}:</b> <i>{$hotel_str}</i>";
                         }
                         ?>
                         <div class="left">
