@@ -115,6 +115,8 @@ function generateEmailBody($hotel, $first_name, $last_name, $country_region, $st
         </tr>';
     }
 
+    if ($hotel === "NULL") $hotel = "<i>Not provided</i>";
+
     $body = '
     
         <div style="background-color:#f7f7f7;margin:0;padding:70px 0;width:100%">
@@ -169,7 +171,7 @@ function generateEmailBody($hotel, $first_name, $last_name, $country_region, $st
                                                                     <tfoot>
                                                                         <tr>
                                                                             <th scope="row" colspan="2" style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">Hotel</th>
-                                                                            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">' . ($hotel ?? "--") . '</td>
+                                                                            <td style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">' . $hotel . '</td>
                                                                         </tr>
                                                                         <tr>
                                                                             <th scope="row" colspan="2" style="' . $fontFamily . 'color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">Pickup date</th>

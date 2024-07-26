@@ -23,13 +23,19 @@ try {
     $first_name = trim($data["first-name"]);
     $last_name = trim($data["last-name"]);
     $driver_license = $data["driver-license"];
-    $hotel = (is_string($data["hotel"]) && strlen($data["hotel"]) > 0) ? trim($data["hotel"]) : null;
     $country_region = $data["country-region"];
     $street = $data["street"];
     $town_city = $data["town-city"];
     $state_county = $data["state-county"];
     $phone = trim($data["phone"]);
     $email = trim($data["email"]);
+    $hotel = "NULL";
+    if (is_string($data["hotel"])) {
+        if (strlen($data["hotel"]) > 0) {
+            $hotel = trim($data["hotel"]);
+            $hotel = "'$hotel'";
+        }
+    }
 
     // Get data from session
     $reservation = $_SESSION['reservation'];
@@ -53,7 +59,7 @@ try {
     $drop_off_location = $itinerary['returnLocation'];
 
     // Insert contact info into database
-    $contact_info_query = "INSERT INTO `contact_info` (`first_name`, `last_name`, `driver_license`, `hotel`, `country_or_region`, `street`, `town_or_city`, `state_or_county`, `phone`, `email`) VALUES ('{$first_name}', '{$last_name}', '{$driver_license}', '{$hotel}', '{$country_region}', '{$street}', '{$town_city}', '{$state_county}', '{$phone}', '{$email}');";
+    $contact_info_query = "INSERT INTO `contact_info` (`first_name`, `last_name`, `driver_license`, `hotel`, `country_or_region`, `street`, `town_or_city`, `state_sor_county`, `phone`, `email`) VALUES ('{$first_name}', '{$last_name}', '{$driver_license}', {$hotel}, '{$country_region}', '{$street}', '{$town_city}', '{$state_county}', '{$phone}', '{$email}');";
     $contact_info_result = mysqli_query($con, $contact_info_query);
     $contact_info_id = mysqli_insert_id($con);
 
@@ -67,7 +73,7 @@ try {
     }
 
     // Insert order request into database
-    $order_request_query = "INSERT INTO `order_requests` (`key`, `pick_up`, `drop_off`, `pick_up_location`, `drop_off_location`, `confirmed`, `contact_info_id`, `sub_total`, `car_id`, `days`) VALUES ('{$key}', FROM_UNIXTIME({$pick_up_ts}), FROM_UNIXTIME({$drop_off_ts}), `{$pick_up_location}`, `{$drop_off_location}`, 0, {$contact_info_id}, '{$sub_total}', {$vehicle['id']}, {$days});";
+    $order_request_query = "INSERT INTO `order_requests` (`key`, `pick_up`, `drop_off`, `pick_up_location`, `drop_off_location`, `confirmed`, `contact_info_id`, `sub_total`, `car_id`, `days`) VALUES ('{$key}', FROM_UNIXTIME({$pick_up_ts}), FROM_UNIXTIME({$drop_off_ts}), '{$pick_up_location}', '{$drop_off_location}', 0, {$contact_info_id}, '{$sub_total}', {$vehicle['id']}, {$days});";
     $order_request_result = mysqli_query($con, $order_request_query);
     $order_request_id = mysqli_insert_id($con);
 
