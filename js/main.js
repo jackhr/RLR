@@ -644,7 +644,9 @@ $(function () {
 
         const emailJSON = await emailRes.json();
 
-        if (emailJSON.success) {
+        if (emailJSON.data.debugging) return console.log(emailJSON);
+
+        if (emailJSON.success && !emailJSON.data.debugging) {
             location.href = `/confirmation.php?key=${emailJSON.data.key}`;
         } else {
             Swal.fire({
