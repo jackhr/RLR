@@ -21,6 +21,12 @@ try {
 
     $debugging = isset($debugging_email_string);
 
+    if ($debugging) {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+    }
+
     $first_name_trimmed = trim($data["first-name"]);
     $last_name_trimmed = trim($data["last-name"]);
     $driver_license_trimmed = trim($data["driver-license"]);
@@ -97,21 +103,26 @@ try {
         $order_request_add_on_result = mysqli_query($con, $order_request_add_on_query);
     }
 
-    // Email values
-    $subject = "Car Rental Request at RL Rentals (Antigua)";
-    $headers  = "From: no-reply@rlrentals.com\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
+    // Generate client email body
+    $client_email_body = generateEmailBody($hotel_trimmed, $first_name_trimmed, $last_name_trimmed, $country_region_trimmed, $street_trimmed, $town_city_trimmed, $state_county_trimmed, $phone_trimmed, $email_trimmed, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal);
 
-    $body = generateEmailBody($hotel_trimmed, $first_name_trimmed, $last_name_trimmed, $country_region_trimmed, $street_trimmed, $town_city_trimmed, $state_county_trimmed, $phone_trimmed, $email_trimmed, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal);
+    // Generate admin email body
+    $admin_email_body = generateEmailBody($hotel_trimmed, $first_name_trimmed, $last_name_trimmed, $country_region_trimmed, $street_trimmed, $town_city_trimmed, $state_county_trimmed, $phone_trimmed, $email_trimmed, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal, true);
 
     // Send email to client
-    $mail_res_client = mail($email, $subject, $body, $headers);
+    $mail_res_client = handleSendEmail($email, $client_email_body);
 
-    // Send email to Admin
-    $to = $debugging ? $debugging_email_string : (isset($testing_email_string) ? $testing_email_string : $email_string);
+    // determine admin email string
+    if ($debugging) {
+        $admin_email_str = $debugging_email_string;
+    } else if (isset($testing_email_string)) {
+        $admin_email_str = $testing_email_string;
+    } else {
+        $admin_email_str = $email_string;
+    }
 
-    $mail_res_admin = mail($to, $subject, $body, $headers);
+    // Send email to admin
+    $mail_res_admin = handleSendEmail($admin_email_str, $admin_email_body, $email);
 
     if ($destory_session_after_ordering === true) session_destroy();
 
@@ -120,7 +131,7 @@ try {
         "message" => "success",
         "status" => 200,
         "data" => [
-            "mail" => compact("to", "subject", "body", "headers", "mail_res_client", "mail_res_admin"),
+            "mail" => compact("mail_res_client", "mail_res_admin"),
             "key" => $key,
             "debugging" => $debugging,
         ]
@@ -131,6 +142,8 @@ try {
         $res["data"]["contact_info_result"] = $contact_info_result;
         $res["data"]["order_request_query"] = $order_request_query;
         $res["data"]["order_request_result"] = $order_request_result;
+        $res["data"]["admin_email_body"] = $admin_email_body;
+        $res["data"]["client_email_body"] = $client_email_body;
     }
 
     respond($res);

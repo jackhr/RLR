@@ -5,6 +5,7 @@ function makeAddOnDescriptionStr($add_on, $vehicles)
     $add_on_str = $add_on['description'];
     if ($add_on['name'] !== "Collision Insurance") return $add_on_str;
 
+    $insurance_strings_arr = [];
     foreach ($vehicles as $vehicle) {
         $key = "USD\${$vehicle['insurance']}/day";
         if (isset($insurance_strings_arr[$key])) {
@@ -92,13 +93,24 @@ function getAddOnsSubTotal($add_ons = null, $days = null, $itinerary = null, $ve
     return $sub_total;
 }
 
-function generateEmailBody($hotel, $first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal)
+function handleSendEmail($email_str = "", $body = "", $reply_to = "")
 {
-    function generateAddress($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email)
-    {
-        return "{$first_name} {$last_name}<br>{$street}<br>{$town_city}, {$state_county}<br>{$country_region}<br><a href=\"tel:{$phone}\" style=\"color:#1589c9;font-weight:normal;text-decoration:underline\" target=\"_blank\">{$phone}</a><br><a href=\"mailto:$email\" target=\"_blank\">{$email}</a>";
-    }
+    $headers  = "From: no-reply@rlrentalsantigua.com\r\n";
+    if (strlen($reply_to) > 0) $headers .= "Reply-To: $reply_to\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
+    $subject = "Car Rental Request at RL Rentals (Antigua)";
 
+    return mail($email_str, $subject, $body, $headers);
+}
+
+function generateAddress($first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email)
+{
+    return "{$first_name} {$last_name}<br>{$street}<br>{$town_city}, {$state_county}<br>{$country_region}<br><a href=\"tel:{$phone}\" style=\"color:#1589c9;font-weight:normal;text-decoration:underline\" target=\"_blank\">{$phone}</a><br><a href=\"mailto:$email\" target=\"_blank\">{$email}</a>";
+}
+
+function generateEmailBody($hotel, $first_name, $last_name, $country_region, $street, $town_city, $state_county, $phone, $email, $order_request_id, $vehicle, $add_ons, $itinerary, $days, $sub_total, $timestamp, $key, $vehicle_subtotal, $is_admin_email = false)
+{
     $fontFamily = 'font-family:"Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;';
 
     $add_ons_rows = "";
@@ -117,8 +129,18 @@ function generateEmailBody($hotel, $first_name, $last_name, $country_region, $st
 
     if (is_null($hotel)) $hotel = "<i>Not provided</i>";
 
+    $intro = '<p style="margin:0 0 16px">Hi ' . $first_name . ' ' . $last_name . ',</p>
+    <p style="margin:0 0 16px">Just to let you know - we\'ve received your order #' . $order_request_id . ', and it is now being processed.</p>
+    <p style="margin:0 0 16px">Pay with cash or card when you pick-up your vehicle.</p>';
+
+    if ($is_admin_email) {
+        $intro = '<p style="margin:0 0 16px">Hi Rasheed,</p>
+        <p style="margin:0 0 16px">Just to let you know, ' . $first_name . ' ' . $last_name . ' has just put in an order request.</p>
+        <p style="margin:0 0 16px">The client\'s email address is ' . $email . '</p>
+        <p style="margin:0 0 16px">Below are the details of the order:</p>';
+    }
+
     $body = '
-    
         <div style="background-color:#f7f7f7;margin:0;padding:70px 0;width:100%">
             <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color:#ffffff;border:1px solid #dedede;border-radius:3px;margin: auto;">
                 <tbody>
@@ -146,9 +168,7 @@ function generateEmailBody($hotel, $first_name, $last_name, $country_region, $st
                                                     <tr>
                                                         <td valign="top" style="padding:48px 48px 32px">
                                                             <div style="color:#636363;' . $fontFamily . 'font-size:14px;line-height:150%;text-align:left">
-                                                                <p style="margin:0 0 16px">Hi ' . $first_name . ' ' . $last_name . ',</p>
-                                                                <p style="margin:0 0 16px">Just to let you know - we\'ve received your order #' . $order_request_id . ', and it is now being processed.</p>
-                                                                <p style="margin:0 0 16px">Pay with cash or card when you pick-up your vehicle.</p>
+                                                                ' . $intro . '
                                                                 <h2 style="color:#1589c9;display:block;' . $fontFamily . 'font-size:18px;font-weight:bold;line-height:130%;margin:0 0 18px;text-align:left">Order #' . $order_request_id . ' (<time datetime="' . gmdate("Y-m-d\TH:i:s\+00:00", $timestamp) . '">' . (date("F d, Y", $timestamp)) . '</time>)</h2>
                                                                 <table cellspacing="0" cellpadding="6" border="1" style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;width:100%;font-family:\"Helvetica Neue\"Helvetica,Roboto,Arial,sans-serif">
                                                                     <thead>
