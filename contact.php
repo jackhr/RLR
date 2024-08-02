@@ -17,8 +17,9 @@ include_once 'includes/header.php';
         <h1>RL Rentals (Antigua)</h1>
 
         <div class="contact-brief-info">
-            <span>Herbert’s road</span>
-            <span>Piggots</span>
+            <span>RL Rentals Antigua</span>
+            <span>V.C. Bird Int'l Airport</span>
+            <span>St. John's</span>
             <span>Antigua, WI</span>
         </div>
 
