@@ -26,7 +26,15 @@ function getDifferenceInDays($pickUpDate, $returnDate)
 {
     $start = new DateTime($pickUpDate);
     $end = new DateTime($returnDate);
+    
+    // Set the time to midnight for both dates to count full days
+    $start->setTime(0, 0);
+    $end->setTime(0, 0);
+
+    // Calculate the difference in days
     $diff = $start->diff($end);
+
+    // Return the number of days plus one to include the pickup day
     return $diff->days;
 }
 
