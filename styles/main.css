@@ -136,6 +136,7 @@ div.inner {
     line-height: 1.2;
     font-weight: 700;
     margin     : auto;
+    text-align : center;
 }
 
 body>.overlay {
@@ -205,7 +206,7 @@ h6 sup {
 }
 
 #intro-section div.inner {
-    padding  : 36px 40px 90px;
+    padding  : 60px 40px;
     max-width: unset;
 }
 
@@ -408,8 +409,26 @@ html.viewing-hamburger-menu #hamburger-nav {
 }
 
 #intro-section {
-    background     : url("/assets/images/bg/darkwood-beach.jpg") center top no-repeat;
-    background-size: cover;
+    background           : url("/assets/images/bg/darkwood-beach.jpg") center top no-repeat;
+    background-size      : cover;
+    background-attachment: fixed;
+    height               : 500px;
+}
+
+#intro-section h1 {
+    margin         : auto;
+    text-align     : center;
+    height         : 100%;
+    width          : 100%;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    background     : #00000030;
+    font-size      : 48px;
+    letter-spacing : 1px;
+    color          : var(--white);
+    padding        : 0 24px;
+    text-shadow    : 0 0 8px #00000080;
 }
 
 #intro-section form {
@@ -454,11 +473,16 @@ html.viewing-hamburger-menu #hamburger-nav {
     background: var(--white);
 }
 
+#feature-section div.inner {
+    padding: 50px var(--general-padding);
+}
+
 #feature-section h1 {
     font-size     : 30px;
     margin        : 50px auto;
     line-height   : 50px;
     letter-spacing: 1px;
+    display       : none;
 }
 
 #intro-section h2:nth-of-type(2) {
@@ -526,26 +550,17 @@ html.viewing-hamburger-menu #hamburger-nav {
 }
 
 #landing-cars-section div.inner>h1 {
-    margin     : 0;
+    margin     : 0 0 48px;
     color      : var(--white);
     font-size  : 30px;
     line-height: 50px;
-}
-
-#landing-cars-section div.inner>h2 {
-    text-transform: none;
-    font-style    : italic;
-    color         : var(--yellow);
-    font-size     : 20px;
-    margin        : 10px 0 50px;
-    line-height   : 40px;
 }
 
 #cars {
     display        : flex;
     flex-wrap      : wrap;
     gap            : 30px;
-    justify-content: space-between;
+    justify-content: center;
 }
 
 .car-container {
@@ -555,11 +570,12 @@ html.viewing-hamburger-menu #hamburger-nav {
     position        : relative;
     overflow        : hidden;
     text-align      : left;
-    height          : 390px;
-    cursor          : pointer;
+    height          : 420px;
     min-width       : 300px;
     margin          : auto;
     color           : var(--black);
+    display         : flex;
+    flex-direction  : column;
 }
 
 .car-container:hover,
@@ -602,6 +618,26 @@ html.viewing-hamburger-menu #hamburger-nav {
     height  : 50%;
     overflow: hidden;
     display : flex;
+}
+
+.car-container .bottom {
+    max-height: 180px;
+    margin-top: auto;
+}
+
+.discount-text {
+    text-align : center;
+    font-weight: 600;
+    color      : var(--black);
+    position   : relative;
+    z-index    : 10;
+    transition : all ease 0.5s;
+    margin-top : 6px;
+}
+
+.car-container:hover .discount-text {
+    color      : var(--yellow);
+    font-weight: 800;
 }
 
 .car-container .top {
@@ -951,11 +987,20 @@ table tr td:last-child {
     .car-container {
         width: calc(50% - 15px);
     }
+
+    .discount-text {
+        margin-top: 14px;
+    }
 }
 
 @media screen and (max-width: 991px) {
     :root {
         --nav-height: 110px;
+    }
+
+    #index-page .hq-rental-software-integration {
+        width    : 100%;
+        max-width: 400px;
     }
 
     header div.inner>nav {
@@ -968,9 +1013,13 @@ table tr td:last-child {
     }
 
     #intro-section div.inner {
-        padding        : 36px 40px 36px;
+        padding        : 36px 40px;
         align-items    : center;
         justify-content: center;
+    }
+
+    #intro-section h1 {
+        font-size: 32px;
     }
 
     #features {

@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /includes/env.php
 Disallow: /archive%202024-07-26
+Disallow: /bdiy64_utvd97

@@ -2,6 +2,12 @@
     background-image: url("/assets/images/bg/pigeon-beach.jpg");
 }
 
+.hq-rental-software-integration {
+    width        : 100%;
+    border-radius: 4px;
+    overflow     : hidden;
+}
+
 #itinerary-section div.inner,
 #vehicle-selection-section div.inner,
 #vehicle-add-ons div.inner,
@@ -641,7 +647,7 @@
 @media screen and (max-width: 768px) {
 
     #reservation-steps div.inner {
-        padding: 0;
+        padding: 0 32px;
     }
 
     .reservation-flow-container {

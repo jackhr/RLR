@@ -9,78 +9,25 @@ $vehicles_arr = [];
 
 $query = "SELECT * FROM vehicles WHERE landing_order IS NOT NULL ORDER BY landing_order ASC";
 $result = mysqli_query($con, $query);
-while ($row = mysqli_fetch_assoc($result)) $vehicles_arr[] = $row;
+while ($row = mysqli_fetch_assoc($result)) $vehicles_arr[$row['id']] = $row;
+
+$query = "SELECT * FROM vehicle_discounts";
+$result = mysqli_query($con, $query);
+while ($row = mysqli_fetch_assoc($result)) {
+    if ($vehicles_arr[$row['vehicle_id']]) {
+        $vehicles_arr[$row['vehicle_id']]['has_discount'] = true;
+    };
+}
 
 ?>
 
 <section id="intro-section">
-
-    <div class="inner">
-
-        <form action="">
-
-            <h2>PICK UP</h2>
-            <div class="custom-select pick-up form-input">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                    <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                </svg>
-                <span>Choose Location</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                    <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
-                </svg>
-                <div class="custom-select-options">
-                    <span class="selected">Choose Location</span>
-                    <span>Your Hotel</span>
-                    <span>Airport</span>
-                </div>
-            </div>
-
-            <div class="checkbox-container">
-                <input id="return-to-same-location" type="checkbox" class="hidden-checkbox" hidden checked aria-checked="true" />
-                <div class="custom-checkbox"></div>
-                <label class="custom-checkbox-label">Return to the same location</label>
-            </div>
-
-            <div>
-                <input type="text" id="pick-up-flatpickr" class="flatpickr-input form-input" placeholder="Pickup Date">
-            </div>
-
-            <h2>RETURN</h2>
-            <div class="custom-select return form-input" style="display: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                    <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
-                </svg>
-                <span>Choose Location</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                    <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
-                </svg>
-                <div class="custom-select-options">
-                    <span class="selected">Choose Location</span>
-                    <span>Your Hotel</span>
-                    <span>Airport</span>
-                </div>
-            </div>
-            <div>
-                <input type="text" id="return-flatpickr" class="flatpickr-input form-input" placeholder="Return Date">
-            </div>
-
-            <button type="submit">
-                <span>Find a Vehicle</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                    <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
-                </svg>
-            </button>
-
-        </form>
-
-    </div>
-
+    <h1>WELCOME TO RL RENTALS - ANTIGUA, WI</h1>
 </section>
 
 <section id="feature-section">
 
     <div class="inner">
-        <h1>WELCOME TO RL RENTALS - ANTIGUA, WI</h1>
         <div id="features">
             <div class="feature-container">
                 <div class="feature-icon">
@@ -155,11 +102,10 @@ while ($row = mysqli_fetch_assoc($result)) $vehicles_arr[] = $row;
 
 <section id="landing-cars-section">
     <div class="inner">
-        <h1>FEATURED VEHICLES</h1>
-        <h2>For discounted rates, enter 2 or more days.</h2>
+        <h1>OUR FLEET</h1>
         <div id="cars">
             <?php foreach ($vehicles_arr as $vehicle) { ?>
-                <a class="car-container" href="/book-now.php?vehicle_id=<?php echo $vehicle['id']; ?>">
+                <div class="car-container">
                     <div class="overlay">
                         <div></div>
                     </div>
@@ -221,14 +167,17 @@ while ($row = mysqli_fetch_assoc($result)) $vehicles_arr[] = $row;
                     <div class="bottom">
                         <img src="/assets/images/vehicles/<?php echo $vehicle['slug']; ?>.jpg" alt="Car thumbnail">
                     </div>
-                </a>
+                    <?php if ($vehicle['has_discount'] === true) { ?>
+                        <div class="discount-text">7+ days are discounted</div>
+                    <?php } ?>
+                </div>
             <?php } ?>
         </div>
-        <a href="/book-now.php?see-all-vehicles=true">
+        <a href="/book-now.php">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
                 <path d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z" />
             </svg>
-            <span>See All Vehicles</span>
+            <span>Book Your Vehicle Now</span>
         </a>
     </div>
 </section>
