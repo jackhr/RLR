@@ -12,8 +12,8 @@ const STATE = {
 };
 
 $(function () {
-    STATE.pickUpFP = $("#pick-up-flatpickr").flatpickr(STATE.configFP);
-    STATE.returnFP = $("#return-flatpickr").flatpickr(STATE.configFP);
+    STATE.pickUpFP = $("#pick-up-flatpickr").flatpickr?.(STATE.configFP);
+    STATE.returnFP = $("#return-flatpickr").flatpickr?.(STATE.configFP);
 
     $(".checkbox-container").on('click', function () {
         const checkbox = $(this).find('input');
@@ -126,16 +126,12 @@ $(function () {
 
     $(".vehicle-container .continue-btn").on('click', async function () {
         const vehicleContainer = $(this).closest('.vehicle-container');
-
         const id = vehicleContainer.data('vehicle-id');
         const name = vehicleContainer.find('.vehicle-name').text();
         const imgSrc = vehicleContainer.children('img').attr('src');
         const data = {
             action: "vehicle",
-            step: 2,
             id,
-            name,
-            imgSrc
         };
 
         const ReservationSessionRes = await fetch('/includes/reservation.php', {
@@ -694,12 +690,6 @@ $(function () {
         });
     });
 
-    $('#about-carousel>div').slick({
-        prevArrow: '<div data-role="none" class="slick-prev arrow-container"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6" /></svg></div>',
-        nextArrow: '<div data-role="none" class="slick-next arrow-container"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6" /></svg></div>',
-        autoplay: true,
-        dots: true,
-    });
 });
 
 function handleInvalidFormData(data, section) {
@@ -805,16 +795,24 @@ function pickUpDateIsSameAsReturnDate(data) {
 }
 
 function pickUpDateIsAfterReturnDate(data) {
-    const pickUpDate = new Date(data.pickUpDate.altValue);
-    const returnDate = new Date(data.returnDate.altValue);
-
-    return pickUpDate > returnDate;
+    const pickUpDay = getDayFromDate(data.pickUpDate.altValue);
+    const returnDay = getDayFromDate(data.returnDate.altValue);
+    const pickUpYear = getYearFromDate(data.pickUpDate.altValue);
+    const returnYear = getYearFromDate(data.returnDate.altValue);
+    if (pickUpYear > returnYear) return true;
+    return pickUpDay > returnDay && (data.pickUpDate.ts - 86400000 > data.returnDate.ts); // could be same day but different month;
 }
 
 function getDayFromDate(dateStr) {
     // dateStr = "April 24, 2024 10:00 am"
     if (!dateStr) return;
     return Number(dateStr.split(',')[0].split(' ')[1]);
+}
+
+function getYearFromDate(dateStr) {
+    // dateStr = "April 24, 2024 10:00 am"
+    if (!dateStr) return;
+    return Number(dateStr.split(', ')[1].split(' ')[0]);
 }
 
 function goToAddOns() {

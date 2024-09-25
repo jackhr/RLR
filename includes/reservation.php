@@ -8,6 +8,12 @@ include 'helpers.php';
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
+// Check if JSON was properly decoded
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo json_encode(['error' => 'Invalid JSON input']);
+    exit;
+}
+
 if (isset($data['step'])) {
     $_SESSION['reservation']['step'] = $data['step'];
     unset($data['step']);
